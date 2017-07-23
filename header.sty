@@ -19,10 +19,11 @@
 \usepackage{mathtext}               % Кириллица в формулах
 \usepackage{mathtools}              % Тот же amsmath, только с некоторыми 
 %поправками
+\usepackage{bm}                     % Жирный шрифт в математике
+\usepackage{nicefrac}
 
 %% Алгоритмы %%
-\usepackage{algorithm}              % Убирает перенос + другие мелочи
-\usepackage{algorithmicx}           % Окружение для кода
+\usepackage{algorithm}
 \usepackage[noend]{algpseudocode}   % Псевдокод
 \usepackage{listings}               % Отрывки кода на настоящих ЯП
 
@@ -38,7 +39,15 @@
 
 %% Библиотеки Tikz %%
 \usetikzlibrary{patterns,calc,intersections,through,backgrounds}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{arrows,%
+	petri,%
+	topaths}%
+\usetikzlibrary{automata, positioning}
 \usetkzobj{all}
+
+\usepackage{tkz-berge}
+\usepackage[position=top]{subfig}
 
 %% Оформление текста %%
 \usepackage{indentfirst}            % Красная строка в начале текста
@@ -50,6 +59,7 @@
 \usepackage{titlesec}               % Изменение формата заголовков
 \usepackage{makecell}               % Разбиение клетки по диагонали
 \usepackage{framed}					% Всякие рамки
+\usepackage[font=small]{caption}	% Подписи к картинкам
 
 %% Команды %%
 \usepackage{xparse}                 % Интерфейс для создания новых команд  
@@ -144,6 +154,7 @@
 \newcommand{\N}{\mathbb{N}}                     % Натуральные числа
 \newcommand{\Z}{\mathbb{Z}}                     % Целые числа
 \newcommand{\R}{\mathbb{R}}                     % Действительные числа
+\renewcommand{\C}{\mathbb{C}}                   % Комплексные числа
 \newcommand{\F}{\mathcal{F}}                    % Сигма-алгебра
 \newcommand{\B}{\mathcal{B}}                    % Борелевская сигма-алгебра
 \newcommand{\A}{\mathcal{A}}                    % Алгебра
@@ -202,6 +213,7 @@
 %Algorithm
 \newcommand{\algname}[1]{\textsc{#1}}                           % Стилизация 
 %названия
+\newcommand*\Let[2]{\State #1 \(\gets\) #2}					% Присваивание
 
 %% Полоска слева от текста
 \newlength{\leftbarwidth}
