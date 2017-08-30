@@ -1,3 +1,243 @@
 \section{Фильтр Калмана}
-\subsection{Мотивация}
-\subsection{Формализм}
+Теперь приступим к так называемым фильтрам Калмана для линейных систем с 
+дискретным временем. Его вывод будет основан на двух предположениях:
+\begin{itemize}
+	\item В гауссовском случае фильтр Калмана является оптимальной оценкой 
+	состояния в среднеквадратичном смысле (MMSE state estimator).  
+	\item В остальных случаях фильтр Калмана является оптимальной 
+	\emph{линейной} оценкой состояния в среднеквадратничном смысле (LMMSE state 
+	estimator).
+\end{itemize}
+
+Также далее мы опишем детерменистическую модель (метод наименьших квадратов). 
+Но начнём с описания базового пространства состояний.
+
+\subsection{Стохастическое пространство состояний}
+И сразу же дадим определение.
+\begin{definition}
+	Линейное (изменяющееся во времени) пространство состояний с дискретным 
+	временем задаётся парой уравнений:
+	\begin{align*}
+		\mathbf{x}_{k + 1} &= \mathbf{F}_{k}\mathbf{x}_{k} + \mathbf{G}_{k} 
+		\mathbf{w}_{k}& \quad (\text{уравнение эволюции системы}) \\
+		\mathbf{z}_{k + 1} &= \mathbf{H}_{k}\mathbf{x}_{k} + \mathbf{v}_{k}&
+		\quad (\text{уравнение измерения})
+	\end{align*}
+	где
+	\begin{itemize}
+		\item \(\mathbf{F}_{k} \in \mathrm{Mat}_{n \times n}(\R)\), 
+		\(\mathbf{G}_{k} \in \mathrm{Mat}_{n \times n_{w}}(\R)\), 
+		\(\mathbf{H}_{k} \in \mathrm{Mat}_{m \times n}(\R)\)~--- известные 
+		матрицы,
+		\item \(\mathbf{x}_{k} \in \R^{n}\)~--- \emph{вектор состояния},
+		\item \(\mathbf{w}_{k} \in \R^{n_{w}}\)~--- \emph{шум состояния},
+		\item \(\mathbf{z}_{k} \in \R^{m}\)~--- \emph{вектор наблюдений},
+		\item \(\mathbf{v}_{k} \in \R^{m}\)~--- \emph{шум наблюдений},
+	\end{itemize}
+
+	Начальным условием для такой системы является \(\mathbf{x}_{0}\), которая 
+	обычно считается за случайную величину.
+\end{definition}
+
+Теперь докажем одно свойство:
+\begin{property}\label{state-space-markov-property}
+	Если \(\{\mathbf{w}_{n}\}_{n \in \N}\) является последовательностью 
+	независимых случайных величин и она не зависит от \(\mathbf{x_{0}}\), то 
+	процесс \(\{\mathbf{x}_{k}\}_{k \in \N}\) является марковским.
+\end{property}
+\begin{proof}
+	Раскрыв формулу для \(\mathbf{x}_{k + 1}\), получим, что это линейная 
+	функция от независимых случайных величин \(\mathbf{x}_{0}, \mathbf{w}_{1}, 
+	\ldots, \mathbf{w}_{k}\). Из этого следует, что \(\mathbf{w}_{k}\) не 
+	зависит от \(\mathbf{x}_{i}\) при \(i \leq k\). Отсюда следует, что 
+	\(\mathbf{x}_{k + 1}\) разбивается на две части: на \(\mathbf{F}_{k} 
+	\mathbf{x}_{k}\), которая однозначно задаётся значением \(\mathbf{x}_{k}\), 
+	и на \(\mathbf{G}_{k}\mathbf{w}_{k}\), которая не зависит от 
+	\(\mathbf{x}_{0}, \mathbf{x}_{1}, \ldots, \mathbf{x}_{k}\). Следовательно, 
+	\[
+		\Pr{\mathbf{x}_{k + 1} = \mathbf{a}_{k + 1} \given \mathbf{x}_{0} = 
+		\mathbf{a}_{0}, \ldots, \mathbf{x}_{k} = \mathbf{a}_{k}} = 
+		\Pr{\mathbf{x}_{k + 1} = \mathbf{a}_{k + 1} \given \mathbf{x}_{k} = 
+		\mathbf{a}_{k}}. \qedhere
+	\]
+\end{proof}
+\begin{remark}
+	На самом деле тут не обязательна линейность~--- достаточно, что 
+	\(\mathbf{x}_{k + 1}\) есть функция от \(\mathbf{x}_{k}\) и 
+	\(\mathbf{w}_{k}\).
+\end{remark}
+\begin{remark}
+	Процесс \((\mathbf{z}_{n})_{n \in \N}\) обычно не является марковским.
+\end{remark}
+\begin{consequence}
+	В принципе, плотность распределения вектора \(\mathbf{x}_{k + 1}\) можно 
+	считать с помощью аналога обобщённого уравнения Маркова:
+	\[
+		p_{\mathbf{x}_{k + 1}}(\mathbf{y}_{k + 1}) = \idotsint\limits_{\R^{n}} 
+		p_{\mathbf{x}_{k + 1} \mid \mathbf{x}_{k}}(\mathbf{y}_{k + 1} \mid 
+		\mathbf{y}_{k})p_{\mathbf{x}_{k}}(\mathbf{y}_{k}) \diff \mathbf{y}_{k},
+	\]
+	где \(p_{\mathbf{x}_{k + 1} \mid \mathbf{x}_{k}}(\mathbf{y}_{k + 1} \mid 
+	\mathbf{y}_{k})\) задаётся с помошью \(p_{\mathbf{w}_{k}}(\mathbf{y}_{k + 
+	1})\).
+\end{consequence} 
+
+Теперь рассмотрим так называемые \emph{гауссовские пространства событий}. Они 
+характеризуются тем, что последовательности шумовые последовательности 
+\(\{\mathbf{w}_{n}\}\), \(\{\mathbf{v}_{n}\}\) и начальное условие 
+\(\mathbf{x}_{0}\) образуют гауссовскую последовательность, то есть имеют 
+совместное нормальное распределение. Отсюда сразу же получаем, что тогда 
+процессы \(\{\mathbf{x}_{n}\}\) и \(\{\mathbf{z}_{n}\}\) тоже являются 
+гауссовскими (как линейное преобразование). Если же выполнено 
+\hyperref[state-space-markov-property]{свойство марковости}, то такие 
+пространства называют \emph{моделями Гаусса-Маркова}.
+
+Требование независимости весьма сильное, поэтому иногда его ослабляют следующим 
+образом:
+\begin{itemize}
+	\item Считают, что \(\{\mathbf{w}_{n}\}\)~--- это белый шум в широком 
+	смысле, то есть \(\E{\mathbf{w}_{k}} = \mathbf{0}\) и 
+	\(\cov(\mathbf{w}_{k}, \mathbf{w}_{l}) = \mathbf{Q}_{k}\delta_{kl}\), где 
+	\(\delta_{kl}\)~--- дельта Кронекера.
+	\item Аналогичное предположение делается относительно 
+	\(\{\mathbf{v}_{n}\}\): \(\E{\mathbf{v}_{k}} = \mathbf{0}\) и 
+	\(\cov(\mathbf{v}_{k}, \mathbf{v}_{l}) = \mathbf{R}_{k}\delta_{kl}\).
+	\item Шумы некоррелированы: \(\cov(\mathbf{w}_{k}, \mathbf{v}_{l}) = 
+	\mathbf{0}\).
+	\item \(\mathbf{x}_{0}\) некоррелирован с шумовыми последовательностями. 
+	При этом про \(\mathbf{x}_{0}\) известно, что \(\D{\mathbf{x}_{0}} = 
+	\mathbf{P}_{0}\).
+\end{itemize}
+
+Если выполнены эти условия, то пространство событий называют 
+\emph{стандартным пространством второго порядка}. Иногда бывает полезно 
+позволять корреляцию между шумами:
+\[
+	\cov(\mathbf{w}_{k}, \mathbf{v}_{l}) = \mathbf{S}_{k}\delta_{kl}.
+\] 
+В таком случае пространство событий называют \emph{пространством второго 
+порядка с коррелированным шумом}. 
+
+Всё вышесказанное можно записать одним уравнением:
+\[
+	\cov\left(
+	\begin{pmatrix}
+	\mathbf{w}_{k} \\ \mathbf{v}_{k} \\ \mathbf{x}_{0}
+	\end{pmatrix}
+	,
+	\begin{pmatrix}
+	\mathbf{w}_{l} \\ \mathbf{v}_{l} \\ \mathbf{x}_{0}
+	\end{pmatrix}
+	\right)
+	=
+	\begin{pmatrix}
+	\mathbf{Q}_{k}\delta_{kl} & \mathbf{S}_{k}\delta_{kl} & \mathbf{0} \\
+	\mathbf{S}_{k}^{\intercal}\delta_{kl} & \mathbf{R}_{k}\delta_{kl} & 
+	\mathbf{0} \\
+	\mathbf{0} & \mathbf{0} & \mathbf{P}_{0}
+	\end{pmatrix}
+\]
+
+Стоит заметить, что модели Гаусса-Маркова являются частным случаем моделей 
+второго порядка с коррелированным шумом.
+
+Для стандартной нормальной модели несложно рекурсивно задать матожидание и 
+дисперсию \(\mathbf{x}_{k}\). Действительно, по линейности матожидания
+\[
+	\E{\mathbf{x}_{k + 1}} = \mathbf{F}_{k}\E{\mathbf{x}_{k}} + 
+	\mathbf{G}_{k}\E{\mathbf{w}_{k}} = \mathbf{F}_{k}\E{\mathbf{x}_{k}}.
+\]
+
+Далее, введём обозначение \(\mathbf{P}_{k} = \D{\mathbf{x}_{k}} = 
+\E{(\mathbf{x}_{k} - \E{\mathbf{x}_{k}})(\mathbf{x}_{k} - 
+\E{\mathbf{x}_{k}})^{\intercal}}\).  Заметим, что \(\mathbf{x}_{k + 1} - 
+\E{\mathbf{x}_{k + 1}}= \mathbf{F}_{k}(\mathbf{x}_{k} - \E{\mathbf{x}_{k}}) + 
+\mathbf{G}_{k}\mathbf{w}_{k}\). Далее, вспомним, что \(\mathbf{x}_{k}\) есть 
+линейная функция от \(\mathbf{x}_{0}, \mathbf{w}_{0}, \mathbf{w}_{1}, \ldots, 
+\mathbf{w}_{k - 1}\). Отсюда следует, что \(\mathbf{w}_{k}\) некоррелированно с 
+\(\mathbf{x}_{k}\), а, следовательно, и с \(\mathbf{x}_{k + 1} - 
+\E{\mathbf{x}_{k + 1}}\). Следовательно,
+\begin{align*}
+	\mathbf{P}_{k + 1} &= \E{(\mathbf{F}_{k}(\mathbf{x}_{k} - 
+	\E{\mathbf{x}_{k}}) + \mathbf{G}_{k}\mathbf{w}_{k}) 
+	(\mathbf{F}_{k}(\mathbf{x}_{k} - \E{\mathbf{x}_{k}}) + 
+	\mathbf{G}_{k}\mathbf{w}_{k})^{\intercal}} = \\
+	&= \E{\mathbf{F}_{k}(\mathbf{x}_{k} - \E{\mathbf{x}_{k}})(\mathbf{x}_{k} - 
+	\E{\mathbf{x}_{k}})^{\intercal}\mathbf{F}_{k}^{\intercal}} + 
+	\E{\mathbf{G}_{k}\mathbf{w}_{k}\mathbf{w}_{k}^{\intercal} 
+	\mathbf{G}_{k}^{\intercal}} = \\
+	&= \mathbf{F}_{k}\mathbf{P}_{k + 1}\mathbf{F}_{k}^{\intercal} + 
+	\mathbf{G}_{k}\mathbf{Q}_{k}\mathbf{G}_{k}^{\intercal}.
+\end{align*}
+
+Полученное уравнение относится к так называемым \emph{разностным уравнениям 
+Ляпунова}.
+
+Теперь посмотрим на \(\mathbf{z}_{k}\). Так как по определению \(\mathbf{z}_{k 
++ 1} = \mathbf{H}_{k}\mathbf{x}_{k} + \mathbf{v}_{k}\), где \(\mathbf{x}_{k}\) 
+и \(\mathbf{v}_{k}\) некоррелированны, то несложно посчитать и матожидание, и 
+дисперсию:
+\begin{align*}
+	\E{\mathbf{z}_{k + 1}} &= \mathbf{H}_{k}\E{\mathbf{x}_{k}} + 
+	\E{\mathbf{v}_{k}} = \mathbf{H}_{k}\E{\mathbf{x}_{k}} \\
+	\D{\mathbf{z}_{k}} &= \E{(\mathbf{H}_{k}(\mathbf{x}_{k} - 
+	\E{\mathbf{x}_{k}}) + \mathbf{v}_{k})(\mathbf{H}_{k}(\mathbf{x}_{k} - 
+	\E{\mathbf{x}_{k}}) + \mathbf{v}_{k})^{\intercal}} = \\
+	&= \mathbf{H}_{k}\mathbf{P}_{k}\mathbf{H}_{k}^{\intercal} + \mathbf{R}_{k}.
+\end{align*}
+
+\subsection{Фильтр Калмана в гауссовском случае}
+Рассмотрим следующую модель Гаусса-Маркова:
+\begin{align*}
+	\mathbf{x}_{k + 1} &= \mathbf{F}_{k}\mathbf{x}_{k} + \mathbf{G}_{k} 
+	\mathbf{w}_{k} \\
+	\mathbf{z}_{k + 1} &= \mathbf{H}_{k}\mathbf{x}_{k} + \mathbf{v}_{k}
+\end{align*}
+для которой
+\begin{itemize}
+	\item \(\{\mathbf{w}_{n}\}\) и \(\{\mathbf{v}_{n}\}\)~--- независимые белые 
+	гауссовские шумы, ковариации которых равны \(\cov(\mathbf{w}_{k}, 
+	\mathbf{w}_{l}) = \mathbf{Q}_{k}\delta_{kl}\) и \(\cov(\mathbf{v}_{k}, 
+	\mathbf{v}_{l}) = \mathbf{R}_{k}\delta_{kl}\).
+	\item Начальное состояние системы \(\mathbf{x}_{0}\) имеет нормальное 
+	распределение с дисперсией \(\mathbf{P}_{0}\).
+\end{itemize}
+
+Далее, пусть \(\mathbf{Z}_{k} = (\mathbf{z}_{0}, \ldots, \mathbf{z}_{k})\). 
+Наша цель~--- найти рекурсифную формулу для следующей \emph{оптимальной} в 
+среднеквадратичном смысле оценки \(\mathbf{x}_{k}\):
+\[
+	\hat{\mathbf{x}}_{k}^{+} \equiv \hat{\mathbf{x}}_{k \mid k} = 
+	\E{\mathbf{x}_{k} \given \mathbf{Z}_{k}}.
+\]
+
+Далее, введём \emph{одношаговую оценку} (one-step predictor):
+\[
+	\hat{\mathbf{x}}_{k}^{-} \equiv \hat{\mathbf{x}}_{k \mid k - 1} = 
+	\E{\mathbf{x}_{k} \given \mathbf{Z}_{k - 1}}.
+\]
+
+Для них вводятся соответствующие матрицы условных ковариаций:
+\[
+	\mathbf{P}_{k}^{+} \equiv \mathbf{P}_{k \mid k} = \D{\mathbf{x}_{k} \given 
+	\mathbf{Z}_{k}}, \quad \mathbf{P}_{k}^{-} \equiv \mathbf{P}_{k \mid k - 1} 
+	= \D{\mathbf{x}_{k} \given \mathbf{Z}_{k - 1}}
+\]
+
+\begin{remark}
+	На матрицу \(\mathbf{P}_{k}^{+}\) (и, аналогично, на матрицу 
+	\(\mathbf{P}_{k}^{-}\)) можно смотреть, как на
+	\begin{enumerate}
+		\item матрицу ковариации \emph{постериорной ошибки измерения} 
+		\(\mathbf{e}_{k} = \mathbf{x}_{k} - \hat{\mathbf{x}}_{k}^{+}\). Стоит 
+		заметить, что
+		\[
+			\mathrm{MMSE} = \arg\min_{\hat{\mathbf{x}}_{k}^{+}} 
+			\tr{\E{(\mathbf{x} - \hat{\mathbf{x}}_{k}^{+})^{\intercal} 
+			(\mathbf{x} - \hat{\mathbf{x}}_{k}^{+})}} = \tr{\mathbf{P}_{k}^{+}}.
+		\]
+		
+		\item матрицу ковариаций \emph{условной случайной величины} 
+		\((\mathbf{x}_{k} \mid \mathbf{Z}_{k})\).
+	\end{enumerate}
+\end{remark}
