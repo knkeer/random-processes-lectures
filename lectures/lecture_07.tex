@@ -1,9 +1,25 @@
 \section{Фильтр Калмана}
+Перейдём к статистике. Для начала введём понятие \emph{оптимальной в 
+среднеквадратическом смысле} (MMSE~--- Minimum Mean Square Error) оценки.
+\begin{definition}
+	\emph{Среднеквадратическая ошибка} оценки \(\hat{\bm{\xi}}\) случайного 
+	вектора \(\bm{\xi}\) равна
+	\[
+		\mathrm{MSE} = \tr{\E{(\bm{\xi} - \hat{\bm{\xi}})(\bm{\xi} - 
+		\hat{\bm{\xi}})^{\top}}} = \E{(\bm{\xi} - 
+		\hat{\bm{\xi}})^{\top}(\bm{\xi} - \hat{\bm{\xi}})}.
+	\]
+\end{definition} 
+\begin{definition}
+	Будем называть \(\hat{\bm{\xi}}\) \emph{MMSE-оценкой} случайного вектора 
+	\(\bm{\xi}\), если для неё среднеквадратическая ошибка минимальна.
+\end{definition}
+
 Теперь приступим к так называемым фильтрам Калмана для линейных систем с 
 дискретным временем. Его вывод будет основан на двух предположениях:
 \begin{itemize}
 	\item В гауссовском случае фильтр Калмана является оптимальной оценкой 
-	состояния в среднеквадратичном смысле (MMSE state estimator).  
+	состояния в среднеквадратичном смысле (MMSE state estimator).
 	\item В остальных случаях фильтр Калмана является оптимальной 
 	\emph{линейной} оценкой состояния в среднеквадратничном смысле (LMMSE state 
 	estimator).
@@ -132,7 +148,7 @@
 	=
 	\begin{pmatrix}
 	\mathbf{Q}_{k}\delta_{kl} & \mathbf{S}_{k}\delta_{kl} & \mathbf{0} \\
-	\mathbf{S}_{k}^{\intercal}\delta_{kl} & \mathbf{R}_{k}\delta_{kl} & 
+	\mathbf{S}_{k}^{\top}\delta_{kl} & \mathbf{R}_{k}\delta_{kl} & 
 	\mathbf{0} \\
 	\mathbf{0} & \mathbf{0} & \mathbf{P}_{0}
 	\end{pmatrix}
@@ -150,7 +166,7 @@
 
 Далее, введём обозначение \(\mathbf{P}_{k} = \D{\mathbf{x}_{k}} = 
 \E{(\mathbf{x}_{k} - \E{\mathbf{x}_{k}})(\mathbf{x}_{k} - 
-\E{\mathbf{x}_{k}})^{\intercal}}\).  Заметим, что \(\mathbf{x}_{k + 1} - 
+\E{\mathbf{x}_{k}})^{\top}}\).  Заметим, что \(\mathbf{x}_{k + 1} - 
 \E{\mathbf{x}_{k + 1}}= \mathbf{F}_{k}(\mathbf{x}_{k} - \E{\mathbf{x}_{k}}) + 
 \mathbf{G}_{k}\mathbf{w}_{k}\). Далее, вспомним, что \(\mathbf{x}_{k}\) есть 
 линейная функция от \(\mathbf{x}_{0}, \mathbf{w}_{0}, \mathbf{w}_{1}, \ldots, 
@@ -161,13 +177,13 @@
 	\mathbf{P}_{k + 1} &= \E{(\mathbf{F}_{k}(\mathbf{x}_{k} - 
 	\E{\mathbf{x}_{k}}) + \mathbf{G}_{k}\mathbf{w}_{k}) 
 	(\mathbf{F}_{k}(\mathbf{x}_{k} - \E{\mathbf{x}_{k}}) + 
-	\mathbf{G}_{k}\mathbf{w}_{k})^{\intercal}} = \\
+	\mathbf{G}_{k}\mathbf{w}_{k})^{\top}} = \\
 	&= \E{\mathbf{F}_{k}(\mathbf{x}_{k} - \E{\mathbf{x}_{k}})(\mathbf{x}_{k} - 
-	\E{\mathbf{x}_{k}})^{\intercal}\mathbf{F}_{k}^{\intercal}} + 
-	\E{\mathbf{G}_{k}\mathbf{w}_{k}\mathbf{w}_{k}^{\intercal} 
-	\mathbf{G}_{k}^{\intercal}} = \\
-	&= \mathbf{F}_{k}\mathbf{P}_{k + 1}\mathbf{F}_{k}^{\intercal} + 
-	\mathbf{G}_{k}\mathbf{Q}_{k}\mathbf{G}_{k}^{\intercal}.
+	\E{\mathbf{x}_{k}})^{\top}\mathbf{F}_{k}^{\top}} + 
+	\E{\mathbf{G}_{k}\mathbf{w}_{k}\mathbf{w}_{k}^{\top} 
+	\mathbf{G}_{k}^{\top}} = \\
+	&= \mathbf{F}_{k}\mathbf{P}_{k}\mathbf{F}_{k}^{\top} + 
+	\mathbf{G}_{k}\mathbf{Q}_{k}\mathbf{G}_{k}^{\top}.
 \end{align*}
 
 Полученное уравнение относится к так называемым \emph{разностным уравнениям 
@@ -182,8 +198,8 @@
 	\E{\mathbf{v}_{k}} = \mathbf{H}_{k}\E{\mathbf{x}_{k}} \\
 	\D{\mathbf{z}_{k}} &= \E{(\mathbf{H}_{k}(\mathbf{x}_{k} - 
 	\E{\mathbf{x}_{k}}) + \mathbf{v}_{k})(\mathbf{H}_{k}(\mathbf{x}_{k} - 
-	\E{\mathbf{x}_{k}}) + \mathbf{v}_{k})^{\intercal}} = \\
-	&= \mathbf{H}_{k}\mathbf{P}_{k}\mathbf{H}_{k}^{\intercal} + \mathbf{R}_{k}.
+	\E{\mathbf{x}_{k}}) + \mathbf{v}_{k})^{\top}} = \\
+	&= \mathbf{H}_{k}\mathbf{P}_{k}\mathbf{H}_{k}^{\top} + \mathbf{R}_{k}.
 \end{align*}
 
 \subsection{Фильтр Калмана в гауссовском случае}
@@ -199,8 +215,8 @@
 	гауссовские шумы, ковариации которых равны \(\cov(\mathbf{w}_{k}, 
 	\mathbf{w}_{l}) = \mathbf{Q}_{k}\delta_{kl}\) и \(\cov(\mathbf{v}_{k}, 
 	\mathbf{v}_{l}) = \mathbf{R}_{k}\delta_{kl}\).
-	\item Начальное состояние системы \(\mathbf{x}_{0}\) имеет нормальное 
-	распределение с дисперсией \(\mathbf{P}_{0}\).
+	\item Начальное состояние системы \(\mathbf{x}_{0}\) не зависит от шумов и 
+	имеет нормальное распределение с дисперсией \(\mathbf{P}_{0}\).
 \end{itemize}
 
 Далее, пусть \(\mathbf{Z}_{k} = (\mathbf{z}_{0}, \ldots, \mathbf{z}_{k})\). 
@@ -233,7 +249,7 @@
 		заметить, что
 		\[
 			\mathrm{MMSE} = \arg\min_{\hat{\mathbf{x}}_{k}^{+}} 
-			\tr{\E{(\mathbf{x} - \hat{\mathbf{x}}_{k}^{+})^{\intercal} 
+			\tr{\E{(\mathbf{x} - \hat{\mathbf{x}}_{k}^{+})^{\top} 
 			(\mathbf{x} - \hat{\mathbf{x}}_{k}^{+})}} = \tr{\mathbf{P}_{k}^{+}}.
 		\]
 		
@@ -241,3 +257,838 @@
 		\((\mathbf{x}_{k} \mid \mathbf{Z}_{k})\).
 	\end{enumerate}
 \end{remark}
+
+Напоследок введём два обозначения: \(\mathbf{P}_{0}^{-} = \mathbf{P}_{0}\) и 
+\(\hat{\mathbf{x}}_{0}^{-} = \E{\mathbf{x}_{0}}\).
+
+Теперь вспомним \hyperref[normal-correlation-theorem]{теорему о нормальной 
+корреляции}. Она гласит следующее:
+\begin{itemize}
+	\item Если \(\xi\) и \(\eta\) имеют совместное нормальное распределение, то 
+	\((\xi \mid \eta)\) ``имеет нормальное распределение'' 
+	\(\mathcal{N}(\bm{\mu}, \bm{\Sigma})\), где
+	\begin{align*}
+		\bm{\mu} &= \bm{\mu}_{\xi} + \bm{\Sigma}_{\xi\eta} 
+		\bm{\Sigma}_{\eta\eta}^{-1}(\eta - \bm{\mu}_{\eta}),\\
+		\bm{\Sigma} &= \bm{\Sigma}_{\xi\xi} - \bm{\Sigma}_{\xi\eta} 
+		\bm{\Sigma}_{\eta\eta}^{-1}\bm{\Sigma}_{\eta\xi}.
+	\end{align*}
+	
+	\item Более того, эта теорема корректна и в том случае, когда на всё 
+	навешивается условие на какой-то другой случайный вектор.
+\end{itemize}
+
+Теперь запишем одно простое свойство описанной выше модели:
+\begin{property}
+	Все случайные процессы описанной выше модели, то есть шумы, 
+	\(\mathbf{x}_{k}\) и \(\mathbf{z}_{k}\), являются гауссовскими.
+\end{property}
+\begin{proof}
+	Следует из того, что начальные условия и шумы имеют совместное гауссовское 
+	распределение (так как независимость и каждый элемент имеет нормальное 
+	распределение), и того, что линейное преобразование гауссовского вектора 
+	тоже является гауссовским вектором.
+\end{proof}
+
+Отсюда, недолго думая, получаем гауссовость условных случайных величин 
+\((\mathbf{x}_{k} \mid \mathbf{Z}_{m})\) при всех \(k, m \in \N\). Заметим, что
+\[
+	(\mathbf{x}_{k} \mid \mathbf{Z}_{k}) \sim \mathcal{N} 
+	(\hat{\mathbf{x}}_{k}^{+}, \mathbf{P}_{k}^{+}), \quad
+	(\mathbf{x}_{k} \mid \mathbf{Z}_{k - 1}) \sim \mathcal{N} 
+	(\hat{\mathbf{x}}_{k}^{-}, \mathbf{P}_{k}^{-}).
+\]
+
+Теперь приступим к выводу. Допустим, что нам известна 
+\((\hat{\mathbf{x}}_{k}^{-}, \mathbf{P}_{k}^{-})\). Как нам оценить 
+\((\hat{\mathbf{x}}_{k}^{+}, \mathbf{P}_{k}^{+})\) и \((\hat{\mathbf{x}}_{k + 
+1}^{-}, \mathbf{P}_{k + 1}^{-})\)? Это делается следующим образом.
+
+Сначала проходит \emph{шаг обновления измерений}. Вспомним, что 
+\(\mathbf{z}_{k}  = \mathbf{H}_{k}\mathbf{x}_{k} + \mathbf{v}_{k}\). 
+Следовательно (почему?),
+\[
+	\left(
+		\begin{pmatrix}
+			\mathbf{x}_{k} \\ \mathbf{z}_{k}
+		\end{pmatrix}
+		\Bigg|\ 
+		\mathbf{Z}_{k - 1}
+	\right)
+	\sim
+	\mathcal{N}
+	\left(
+		\begin{pmatrix}
+			\hat{\mathbf{x}}_{k}^{-} \\ \mathbf{H}_{k}\hat{\mathbf{x}}_{k}^{-}
+		\end{pmatrix}
+		,
+		\begin{pmatrix}
+			\mathbf{P}_{k}^{-} & \mathbf{P}_{k}^{-}\mathbf{H}_{k}^{\top} \\
+			\mathbf{H}_{k}\mathbf{P}_{k}^{-} & \mathbf{M}_{k}
+		\end{pmatrix}
+	\right)
+	,
+\]
+где \(\mathbf{M}_{k} \equiv \mathbf{H}_{k}\mathbf{P}_{k}^{-} 
+\mathbf{H}_{k}^{\top} + \mathbf{R}_{k}\).
+
+Теперь надо определить распределение \((\mathbf{x}_{k} \mid \mathbf{Z}_{k}) = 
+(\mathbf{x}_{k} \mid \mathbf{z}_{k}, \mathbf{Z}_{k - 1})\). Для этого 
+воспользуемся теоремой о нормальной корреляции. Тогда \((\mathbf{x}_{k} \mid 
+\mathbf{Z}_{k})\) имеет нормальное распределение с параметрами
+\begin{align*}
+	\hat{\mathbf{x}}_{k}^{+} &= \E{\mathbf{x}_{k} \given \mathbf{Z}_{k}} = 
+	\hat{\mathbf{x}}_{k}^{-} + \mathbf{P}_{k}^{-}(\mathbf{M}_{k})^{-1} 
+	(\mathbf{z}_{k} - \mathbf{H}_{k}\hat{\mathbf{x}}_{k}^{-}) \\
+	\mathbf{P}_{k}^{+} &= \D{\mathbf{x}_{k} \given \mathbf{Z}_{k}} = 
+	\mathbf{P}_{k}^{-} - \mathbf{P}_{k}^{-}\mathbf{H}_{k}^{\top} 
+	(\mathbf{M}_{k})^{-1}\mathbf{H}_{k}\mathbf{P}_{k}^{-}.
+\end{align*}
+
+Дальше идёт \emph{шаг обновления времени}. Теперь вспомним, что \(\mathbf{x}_{k 
++ 1} = \mathbf{F}_{k}\mathbf{x}_{k} + \mathbf{G}_{k}\mathbf{w}_{k}\). Далее, 
+заметим, что \(\mathbf{x}_{k}\) и \(\mathbf{w}_{k}\) независимы при условии 
+\(\mathbf{Z}_{k}\) (почему?). Тогда
+\begin{align*}
+	\hat{\mathbf{x}}_{k + 1}^{-} &= \mathbf{F}_{k}\hat{\mathbf{x}}_{k}^{+}, \\
+	\mathbf{P}_{k + 1}^{-} &= \mathbf{F}_{k}\mathbf{P}_{k}^{+} 
+	\mathbf{F}_{k}^{\top} + \mathbf{G}_{k}\mathbf{Q}_{k} 
+	\mathbf{G}_{k}^{\top}.
+\end{align*}
+
+Теперь выпишем несколько примечаний к этому:
+\begin{itemize}
+	\item Фильтр Калмана считает и оценку \(\hat{\mathbf{x}}_{k}^{+}\), и её 
+	матрицу ковариаций \(\mathbf{P}_{k}^{+}\) (аналогично для 
+	\(\hat{\mathbf{x}}_{k}^{-}\)). Заметьте, что вычисление ковариации 
+	необходимо, так как оно является частью вычисления оценки. Впрочем, оно 
+	важно само по себе, так как оно задаёт меру неопределённости (или 
+	достоверности) оценки.
+	
+	\item Стоит заметить, что матрицы \(\mathbf{P}_{k}^{\pm}\) не зависят от 
+	измерений \(\{\mathbf{z}_{k}\}\). Следовательно, их можно посчитать 
+	заранее, если известны матрицы ковариаций для шума и \emph{системные 
+	матрицы}: \(\mathbf{F}_{k}\), \(\mathbf{G}_{k}\), \(\mathbf{H}_{k}\), 
+	\(\mathbf{Q}_{k}\), \(\mathbf{R}_{k}\) и \(\mathbf{P}_{0}\).
+	
+	\item В гауссовском случае матрица \(\mathbf{P}_{k}^{+}\) является 
+	безусловной ковариационной матрицей: \(\mathbf{P}_{k}^{+} = 
+	\D{\mathbf{x}_{k} - \hat{\mathbf{x}}_{k}^{+}}\).
+	
+	В общем случае безусловная ковариация будет играть ключевую роль в 
+	выведении линейной оптимальной в среднеквадратичном смысле оценки.
+	
+	\item Допустим, что мы хотим оценить \(\mathbf{s}_{k} = 
+	\mathbf{C}\mathbf{x}_{k}\). В таком случае оптимальной оценкой будет 
+	\(\hat{\mathbf{s}}_{k} = \E{\mathbf{C}\mathbf{x}_{k} \given 
+	\mathbf{Z}_{k}} = \mathbf{C}\hat{\mathbf{x}}_{k}^{+}\).
+
+	\item Отклонение наблюдения от ожидаемого
+	\[
+		\tilde{\mathbf{z}}_{k} \equiv \mathbf{z}_{k} - 
+		\mathbf{H}_{k}\hat{\mathbf{x}}_{k}^{-} = \mathbf{z}_{k} - 
+		\E{\mathbf{z}_{k} \given \mathbf{Z}_{k - 1}}
+	\]
+	называется \emph{инновацией}, а процесс \(\{\tilde{\mathbf{z}}_{k}\}\) 
+	называется \emph{процессом инноваций}. Этот процесс сыграет немалую роль в 
+	дальнейшем. К слову: \(\mathbf{M}_{k} = \D{\tilde{\mathbf{z}}_{k}}\).
+\end{itemize}
+
+\subsection{Линейные оценки. Инновационный подход}
+
+Теперь перейдём к общему случаю. Но для начала немного пробежимся по линейным 
+оценкам. Докажем одно утверждение:
+\begin{theorem}
+	Пусть \(\mathbf{x}\), \(\mathbf{y}\)~--- случайные векторы. Тогда 
+	оптимальная в среднеквадратичном смысле линейная (LMMSE) оценка 
+	\(\mathbf{x}\) по \(\mathbf{y}\) равна
+	\[
+		\hat{\mathbf{x}} = \mathbf{m}_{\mathbf{x}} + \bm{\Sigma}_{\mathbf{xy}} 
+		\bm{\Sigma}_{\mathbf{yy}}^{-1}(\mathbf{y} - \mathbf{m}_{\mathbf{y}}),
+	\]
+	где \(\mathbf{m}_{\mathbf{x}} = \E{\mathbf{x}}\), 
+	\(\bm{\Sigma}_{\mathbf{xy}} = \cov(\mathbf{x}, \mathbf{y})\).
+\end{theorem}
+\begin{proof}
+	Так как мы ищем линейную оценку, то скажем, что \(\hat{\mathbf{x}} = 
+	\mathbf{A}^{\top}\mathbf{y} + \mathbf{b}\) (смысл транспонирования 
+	станет ясен немного позднее). Покажем, что оценка должна быть 
+	несмещённой. Допустим, что это не так, и \(\mathbf{x} - \hat{\mathbf{x}} = 
+	\mathbf{a} = (a_{1}, \ldots, a_{n})\). Распишем MSE:
+	\begin{align*}
+		\mathrm{MSE} = \E{(\mathbf{x} - \hat{\mathbf{x}})^{\top} 
+		(\mathbf{x} - \hat{\mathbf{x}})} = \sum_{k = 1}^{n} \E{(x_{k} - 
+		\hat{x}_{k})^{2}}.
+	\end{align*}
+	
+	Отсюда получаем, что достаточно рассмотреть одну компоненту~--- например, 
+	\(k\)-ю. Заметим, что \(\E{x_{k}} - \E{\hat{x}_{k}} = a_{k}\). Пусть 
+	\(\tilde{x}_{k} = (x_{k} - \E{x_{k}}) - (\hat{x}_{k} - \E{\hat{x}_{k}})\), 
+	то есть разность между оцениваемым параметром и несмещённой оценкой. Тогда 
+	\(x_{k} - \hat{x}_{k} = \tilde{x}_{k} + a_{k}\). Следовательно,
+	\[
+		\E{(x_{k} - \hat{x}_{k})^{2}} = \E{(\tilde{x}_{k} + a_{k})^{2}} = 
+		\E{\tilde{x}_{k}^{2}} + a_{k}^{2} + 2a\E{\tilde{x}_{k}} = 
+		\E{\tilde{x}_{k}^{2}} + a_{k}^{2}.
+	\]
+	Следовательно, \(a_{k} = 0\) и оценка должна быть несмещённой. Тогда можно 
+	сказать, что \(\E{\mathbf{x}} = \E{\hat{\mathbf{x}}} = \mathbf{0}\).
+	
+	Распишем среднеквадратическую ошибку, как функцию от матрицы \(\mathbf{A}\):
+	\begin{align*}
+		\mathrm{MSE}(\mathbf{A}) &= \tr{\E{(\mathbf{x} - \hat{\mathbf{x}}) 
+		(\mathbf{x} - \hat{\mathbf{x}})^{\top}}} = \\
+		&= \tr\left(\E{\mathbf{xx}^{\top}} - 
+		\E{\hat{\mathbf{x}}\mathbf{x}^{\top}} - 
+		\E{\mathbf{x}\hat{\mathbf{x}}^{\top}} + 
+		\E{\hat{\mathbf{x}}\hat{\mathbf{x}}^{\top}}\right) = \\
+		&= \tr\left(\bm{\Sigma}_{\mathbf{xx}} - 
+		\mathbf{A}^{\top}\bm{\Sigma}_{\mathbf{yx}} - 
+		\bm{\Sigma}_{\mathbf{xy}}\mathbf{A} + 
+		\mathbf{A}^{\top}\bm{\Sigma}_{\mathbf{yy}}\mathbf{A}\right)
+	\end{align*}
+	
+	Теперь продифференцируем по \(\mathbf{A}\). Для этого вспомним три правила 
+	матричного дифференцирования (если не знали их ранее, то их несложно 
+	вывести покомпонентно):
+	\[
+		\frac{\partial \tr(\mathbf{X}^{\top}\mathbf{A})}{\partial 
+		\mathbf{X}} = \mathbf{A}, \quad \frac{\partial 
+		\tr(\mathbf{A}\mathbf{X})}{\partial \mathbf{X}} = 
+		\mathbf{A}^{\top}, \quad \frac{\partial 
+		\tr{\mathbf{X}^{\top}\mathbf{A}\mathbf{X}}}{\partial \mathbf{X}} = 
+		(\mathbf{A} + \mathbf{A}^{\top})\mathbf{X}.
+	\]
+	Следовательно,
+	\[
+		\frac{\partial}{\partial \mathbf{A}}\mathrm{MSE}(\mathbf{A}) = 
+		-2\bm{\Sigma}_{\mathbf{yx}} + 2\bm{\Sigma}_{\mathbf{yy}}\mathbf{A} = 0 
+		\implies \mathbf{A} = \bm{\Sigma}_{\mathbf{yy}}^{-1} 
+		\bm{\Sigma}_{\mathbf{yx}}.
+	\]
+	
+	Отсюда получаем, что \(\hat{\mathbf{x}} = \bm{\Sigma}_{\mathbf{xy}} 
+	\bm{\Sigma}_{\mathbf{yy}}^{-1}\mathbf{y}\). Переходя к произвольным 
+	значениям матожиданий, получаем желаемое.
+\end{proof}
+
+Рассуждая аналогично доказательству теоремы о нормальной компоненте, можно 
+получить, что
+\[
+	\D{\mathbf{x} - \hat{\mathbf{x}}} = \bm{\Sigma}_{\mathbf{xx}} - 
+	\bm{\Sigma}_{\mathbf{xy}}\bm{\Sigma}_{\mathbf{yy}}^{-1} 
+	\bm{\Sigma}_{\mathbf{yx}}.
+\]
+
+Для удобства введём обозначение \(\E^{\mathrm{L}}[\mathbf{x} \mid \mathbf{y}] 
+\equiv \hat{\mathbf{x}}\). Стоит заметить, что это \emph{не} стандартное 
+обозначение.
+
+Теперь покажем одно свойство этой оценки:
+\begin{property}[принцип ортогональности]
+	Для любой линейной функции \(L(\mathbf{y})\) выполнено
+	\[
+		\E{(\mathbf{x} - \E^{\mathrm{L}}[\mathbf{x} \mid 
+		\mathbf{y}])L(\mathbf{y})^{\top}} = 0.
+	\]
+\end{property}
+\begin{proof}
+	Так как мы рассматриваем линейные функции от \(\mathbf{y}\), то скажем, что 
+	\(L(\mathbf{y}) = \mathbf{A}\mathbf{y} + \mathbf{b}\). Далее, заметим, что 
+	\(\E{\E^{\mathrm{L}}[\mathbf{x} \mid \mathbf{y}]} = \E{\mathbf{x}}\). Тогда 
+	от значения \(\mathbf{b}\) ничего не зависит и можно считать, что
+	\[
+		L(\mathbf{y}) = \mathbf{A}(\mathbf{y} - \E{\mathbf{y}}).
+	\]
+	
+	Теперь можно сказать, что достаточно смотреть на величины \(\mathbf{x}\) и 
+	\(\mathbf{y}\) с нулевым матожиданием. Теперь же можно просто аккуратно 
+	расписать:
+	\begin{align*}
+		\E{(\mathbf{x} - \bm{\Sigma}_{\mathbf{xy}} \bm{\Sigma}_ 
+		{\mathbf{yy}}^{-1} \mathbf{y})(\mathbf{A}\mathbf{y})^{\top}} &= 
+		\E{\mathbf{xy}^{\top}}\mathbf{A}^{\top} - \bm{\Sigma}_{\mathbf{xy}} 
+		\bm{\Sigma}_{\mathbf{yy}}^{-1}\E{\mathbf{yy}^{\top}}\mathbf{A}^{\top} = 
+		\\
+		&= \bm{\Sigma}_{\mathbf{xy}}\mathbf{A}^{\top} - 
+		\bm{\Sigma}_{\mathbf{xy}}\bm{\Sigma}_{\mathbf{yy}}^{-1} 
+		\bm{\Sigma}_{\mathbf{yy}}\mathbf{A}^{\top} = \mathbf{0}.
+	\end{align*}
+	
+	Тем самым мы получили желаемое.
+\end{proof}
+
+Следующее свойство будет крайне полезно в дальнейшем описании. Оно получается, 
+если положить \(\mathbf{y} = (\mathbf{y}_{1}, \mathbf{y}_{2})\).
+\begin{property}
+	Пусть \(\cov(\mathbf{y}_{1}, \mathbf{y}_{2}) = \mathbf{0}\). Тогда
+	\[
+		\E^{\mathrm{L}}[\mathbf{x} \mid \mathbf{y}_{1}, \mathbf{y}_{2}] = 
+		\E^{\mathrm{L}}[\mathbf{x} \mid \mathbf{y}_{1}] + 
+		\E^{\mathrm{L}}[\mathbf{x} \mid \mathbf{y}_{2}] - \E{\mathbf{x}}.
+	\]
+	
+	Более того,
+	\[
+		\D{\mathbf{x} - \E^{\mathrm{L}}[\mathbf{x} \mid \mathbf{y}_{1}, 
+		\mathbf{y}_{2}]} = \bm{\Sigma}_{\mathbf{xx}} - 
+		\bm{\Sigma}_{\mathbf{xy}_{1}} 
+		\bm{\Sigma}_{\mathbf{y}_{1}\mathbf{y}_{1}}^{-1} 
+		\bm{\Sigma}_{\mathbf{y}_{1}\mathbf{x}} - 
+		\bm{\Sigma}_{\mathbf{xy}_{2}} 
+		\bm{\Sigma}_{\mathbf{y}_{2}\mathbf{y}_{2}}^{-1} 
+		\bm{\Sigma}_{\mathbf{y}_{2}\mathbf{x}}.
+	\]
+\end{property}
+\begin{proof}
+	Докажем только первое утверждение, оставив второе в качестве упражнения. 
+	Заметим, что матрица ковариаций имеет следующий вид:
+	\[
+		\left(
+			\begin{array}{c|c}
+				\bm{\Sigma}_{\mathbf{xx}} & \bm{\Sigma}_{\mathbf{xy}} \\
+				\hline
+				\bm{\Sigma}_{\mathbf{yx}} & \bm{\Sigma}_{\mathbf{yy}}
+			\end{array}
+		\right)
+		=
+		\left(
+			\begin{array}{c|cc}
+				\bm{\Sigma}_{\mathbf{xx}} & \bm{\Sigma}_{\mathbf{xy_{1}}} & 
+				\bm{\Sigma}_{\mathbf{xy_{2}}} \\
+				\hline
+				\bm{\Sigma}_{\mathbf{y_{1}x}} & 
+				\bm{\Sigma}_{\mathbf{y_{1}y_{1}}} & \mathbf{0} \\
+				\bm{\Sigma}_{\mathbf{y_{2}x}} & \mathbf{0} & 
+				\bm{\Sigma}_{\mathbf{y_{2}y_{2}}}
+			\end{array}
+		\right).
+	\]
+	
+	Теперь посмотрим на \(\E^{\mathrm{L}}[\mathbf{x} \mid \mathbf{y}_{1}, 
+	\mathbf{y}_{2}]\). Оно равно
+	\[
+		\E^{\mathrm{L}}[\mathbf{x} \mid \mathbf{y}_{1}, \mathbf{y}_{2}] = 
+		\E{\mathbf{x}} + \bm{\Sigma}_{\mathbf{xy}} 
+		\bm{\Sigma}_{\mathbf{yy}}^{-1}(\mathbf{y} - \E{\mathbf{y}}).
+	\]
+	
+	Подставим полученные выше блочные матрицы:
+	\[
+		\E^{\mathrm{L}}[\mathbf{x} \mid \mathbf{y}_{1}, \mathbf{y}_{2}] = 
+		\E{\mathbf{x}} +
+		\begin{pmatrix}
+			\bm{\Sigma}_{\mathbf{xy_{1}}} & \bm{\Sigma}_{\mathbf{xy_{2}}}
+		\end{pmatrix}
+		\begin{pmatrix}
+			\bm{\Sigma}_{\mathbf{y_{1}y_{1}}} & \mathbf{0} \\
+			\mathbf{0} & \bm{\Sigma}_{\mathbf{y_{2}y_{2}}}
+		\end{pmatrix}^{-1}
+		(\mathbf{y} - \E{\mathbf{y}}).
+	\]
+	
+	Теперь вспомним, что обратная к диагональной блочной матрице равна матрице 
+	с обратными блоками. Следовательно, это равно
+	\[
+		\E^{\mathrm{L}}[\mathbf{x} \mid \mathbf{y}_{1}, \mathbf{y}_{2}] = 
+		\E{\mathbf{x}} +
+		\begin{pmatrix}
+			\bm{\Sigma}_{\mathbf{xy_{1}}} & \bm{\Sigma}_{\mathbf{xy_{2}}}
+		\end{pmatrix}
+		\begin{pmatrix}
+			\bm{\Sigma}_{\mathbf{y_{1}y_{1}}}^{-1} & \mathbf{0} \\
+			\mathbf{0} & \bm{\Sigma}_{\mathbf{y_{2}y_{2}}}^{-1}
+		\end{pmatrix}
+		(\mathbf{y} - \E{\mathbf{y}}).
+	\]
+	
+	Осталось заметить, что произведение матриц ведёт себя, как квадратичная 
+	форма (и такое рассмотрение корректно из-за совпадений размеров матриц). 
+	Тогда
+	\begin{multline*}
+		\begin{pmatrix}
+		\bm{\Sigma}_{\mathbf{xy_{1}}} & \bm{\Sigma}_{\mathbf{xy_{2}}}
+		\end{pmatrix}
+		\begin{pmatrix}
+		\bm{\Sigma}_{\mathbf{y_{1}y_{1}}}^{-1} & \mathbf{0} \\
+		\mathbf{0} & \bm{\Sigma}_{\mathbf{y_{2}y_{2}}}^{-1}
+		\end{pmatrix}
+		\begin{pmatrix}
+		\mathbf{y}_{1} - \E{\mathbf{y}_{1}} \\
+		\mathbf{y}_{2} - \E{\mathbf{y}_{2}}
+		\end{pmatrix}
+		=
+		\bm{\Sigma}_{\mathbf{xy_{1}}} \bm{\Sigma}_{\mathbf{y}_{1} 
+		\mathbf{y}_{1}}^{-1}(\mathbf{y}_{1} - \E{\mathbf{y}_{1}}) + \\
+		+ \bm{\Sigma}_{\mathbf{xy_{2}}} \bm{\Sigma}_{\mathbf{y}_{2} 
+		\mathbf{y}_{2}}^{-1}(\mathbf{y}_{2} - \E{\mathbf{y}_{2}})
+	\end{multline*}
+	
+	Отсюда получаем желаемое.
+\end{proof}
+
+Теперь рассмотрим случайную последовательность \(\{\mathbf{z}_{k}\}_{k \geq 
+0}\). По ней можно построить так называемую \emph{последовательность инноваций} 
+(в широком смысле):
+\[
+	\tilde{\mathbf{z}}_{k} = \mathbf{z}_{k} - \E^{\mathbf{L}}[\mathbf{z}_{k} 
+	\mid \mathbf{Z}_{k - 1}].
+\]
+
+На условную случайную величину \(\tilde{\mathbf{z}}_{k}\) можно смотреть, как 
+на случайную величину, содержащую только новую статистическую информацию, 
+которой нет в \(\mathbf{Z}_{k - 1}\). 
+
+Пользуясь свойствами LMMSE-оценки, можно сразу же выписать три свойства:
+\begin{itemize}
+	\item \(\E{\tilde{\mathbf{z}}} = \mathbf{0}\).
+	\item \(\tilde{\mathbf{z}}_{k}\) есть линейная функция от 
+	\(\mathbf{Z}_{k}\).
+	\item Из второго пункта следует, что \(\cov(\tilde{\mathbf{z}}_{k}, 
+	\tilde{\mathbf{z}}_{l}) = \mathbf{0}\) при \(k \neq l\).
+\end{itemize}
+
+Тогда можно сказать, что \(\{\mathbf{z}_{k}\}_{k \geq 0}\) является \emph{белым 
+шумом в широком смысле}.
+
+Теперь введём обозначение \(\tilde{\mathbf{Z}}_{k} = (\tilde{\mathbf{z}}_{1}, 
+\ldots, \tilde{\mathbf{z}}_{k})\). Сразу же заметим, что 
+\(\tilde{\mathbf{Z}}_{k}\) есть линейная функция от \(\mathbf{Z}_{k}\) (так как 
+при построении берутся только линейные преобразования). Следовательно, 
+\(\E^{\mathbf{L}}[\mathbf{x} \mid \mathbf{Z}_{k - 1}] = \E^{\mathbf{L}} 
+[\mathbf{x} \mid \tilde{\mathbf{Z}}_{k - 1}]\) для любой случайной величины 
+\(\mathbf{x}\). Действительно, если \(\tilde{\mathbf{Z}}_{k} = 
+\mathbf{A}\mathbf{Z}_{k} + \mathbf{b}\), то 
+\begin{align*}
+	\E^{\mathbf{L}}[\mathbf{x} \mid \tilde{\mathbf{Z}}_{k}] &= \E{\mathbf{x}} + 
+	\cov(\mathbf{x}, \mathbf{A}\mathbf{Z}_{k} + \mathbf{b})\D{\mathbf{A} 
+	\mathbf{Z}_{k} + \mathbf{b}}^{-1}(\mathbf{A}\mathbf{Z}_{k} + \mathbf{b} - 
+	\E{\mathbf{A}\mathbf{Z}_{k} + \mathbf{b}}) = \\
+	&= \E{\mathbf{x}} + \cov(\mathbf{x}, \mathbf{Z}_{k})\mathbf{A}^{\top} 
+	(\mathbf{A}\D{\mathbf{Z}_{k}}\mathbf{A}^{\top})^{-1} 
+	\mathbf{A}(\mathbf{Z}_{k} - \E{\mathbf{Z}_{k}}) = \\
+	&= \E{\mathbf{x}} + \bm{\Sigma}_{\mathbf{xZ}_{k}}\mathbf{A}^{\top} 
+	(\mathbf{A}^{\top})^{-1}\bm{\Sigma}_{\mathbf{Z}_{k}\mathbf{Z}_{k}}^{-1} 
+	\mathbf{A}^{-1}\mathbf{A}(\mathbf{Z}_{k} - \E{\mathbf{Z}_{k}}) = \\
+	&= \E{\mathbf{x}} + \bm{\Sigma}_{\mathbf{xZ}_{k}} 
+	\bm{\Sigma}_{\mathbf{Z}_{k}\mathbf{Z}_{k}}^{-1}(\mathbf{Z}_{k} - 
+	\E{\mathbf{Z}_{k}}) = \E^{\mathbf{L}}[\mathbf{x} \mid \mathbf{Z}_{k}]
+\end{align*}
+ Из этого следует, что (если \(\E{\mathbf{x}} = 0\))
+\[
+	\E^{\mathbf{L}}[\mathbf{x} \mid \mathbf{Z}_{k}] = 
+	\E^{\mathbf{L}}[\mathbf{x} \mid \tilde{\mathbf{Z}}_{k}] = 
+	\E^{\mathbf{L}}[\mathbf{x} \mid \tilde{\mathbf{Z}}_{k - 1}] +
+	\E^{\mathbf{L}}[\mathbf{x} \mid \tilde{\mathbf{z}}_{k}] =
+	\sum_{i = 0}^{k} \E^{\mathbf{L}}[\mathbf{x} \mid \tilde{\mathbf{z}}_{i}]
+\]
+
+В принципе, вся необходимая теория была введена, так что можно начинать вводить 
+фильтр Калмана для линейных негауссовских моделей. Мы немного обобщим задачу, 
+разрешив корреляцию между шумами. Рассмотрим следующую модель:
+\begin{align*}
+	\mathbf{x}_{k + 1} &= \mathbf{F}_{k}\mathbf{x}_{k} + \mathbf{G}_{k} 
+	\mathbf{w}_{k} \\
+	\mathbf{z}_{k + 1} &= \mathbf{H}_{k}\mathbf{x}_{k} + \mathbf{v}_{k}
+\end{align*}
+Скажем, что \(\{\mathbf{w}_{k}\}\) и \(\{\mathbf{v}_{k}\}\)~--- белые шумы в 
+широком смысле с нулевым матожиданием и ковариацией
+\[
+	\cov\left(
+	\begin{pmatrix}
+	\mathbf{w}_{k} \\ \mathbf{v}_{k}
+	\end{pmatrix}
+	,
+	\begin{pmatrix}
+	\mathbf{w}_{l} \\ \mathbf{v}_{l}
+	\end{pmatrix}
+	\right)
+	=
+	\begin{pmatrix}
+	\mathbf{Q}_{k} & \mathbf{S}_{k} \\
+	\mathbf{S}_{k}^{\top} & \mathbf{R}_{k}
+	\end{pmatrix}
+	\delta_{kl}
+\]
+Далее, начальное условие \(\mathbf{x}_{0}\) имеет матрицу ковариаций 
+\(\mathbf{P}_{0}\) и не коррелирует с шумами.
+
+Теперь введём несколько обозначений:
+\begin{align*}
+	\mathbf{Z}_{k} &= (\mathbf{z}_{1}, \ldots, \mathbf{z}_{k}), \\
+	\hat{\mathbf{x}}_{k \mid k} &= \E^{\mathbf{L}}[\mathbf{x}_{k} \mid 
+	\mathbf{Z}_{k}],& \hat{\mathbf{x}}_{k \mid k - 1} &= 
+	\E^{\mathbf{L}}[\mathbf{x}_{k} \mid \mathbf{Z}_{k - 1}], \\
+	\tilde{\mathbf{x}}_{k \mid k} &= \mathbf{x}_{k} - \hat{\mathbf{x}}_{k \mid 
+	k},& \tilde{\mathbf{x}}_{k \mid k - 1} &= \mathbf{x}_{k} - 
+	\hat{\mathbf{x}}_{k \mid k - 1}, \\
+	\mathbf{P}_{k \mid k} &= \D{\hat{\mathbf{x}}_{k \mid k}},& \mathbf{P}_{k 
+	\mid k - 1} &= \D{\hat{\mathbf{x}}_{k \mid k - 1}}.
+\end{align*}
+
+Инновации будем вводить, как и раньше:
+\[
+	\tilde{\mathbf{z}}_{k} = \mathbf{z}_{k} - \E^{\mathbf{L}}[\mathbf{z}_{k} 
+	\mid \mathbf{Z}_{k - 1}].
+\]
+
+Заметим, что второй член можно преобразовать:
+\begin{align*}
+	\E^{\mathbf{L}}[\mathbf{z}_{k} \mid \mathbf{Z}_{k - 1}] &= \E{\mathbf{z}} + 
+	\bm{\Sigma}_{\mathbf{z}_{k}\mathbf{Z}_{k - 1}} \bm{\Sigma}_{\mathbf{Z}_{k - 
+	1} \mathbf{Z}_{k - 1}}^{-1}(\mathbf{Z}_{k - 1} - \E{\mathbf{Z}_{k - 1}}) = 
+	\\
+	&= \mathbf{H}_{k}\E{\mathbf{x}_{k}} + 
+	\mathbf{H}_{k}\bm{\Sigma}_{\mathbf{x}_{k}\mathbf{Z}_{k - 1}} 
+	\bm{\Sigma}_{\mathbf{Z}_{k - 1} \mathbf{Z}_{k - 1}}^{-1}(\mathbf{Z}_{k - 1} 
+	- \E{\mathbf{Z}_{k - 1}}) = \\
+	&= \mathbf{H}_{k}\E^{\mathbf{L}}[\mathbf{x}_{k} \mid \mathbf{Z}_{k - 1}] = 
+	\mathbf{H}_{k}\hat{\mathbf{x}}_{k \mid k - 1}.
+\end{align*}
+
+Пользуясь этим, получаем, что
+\[
+	\tilde{\mathbf{z}}_{k} = \mathbf{z}_{k} - \mathbf{H}_{k} 
+	\hat{\mathbf{x}}_{k \mid k - 1} = \mathbf{H}_{k} 
+	\tilde{\mathbf{x}}_{k \mid k - 1} + \mathbf{v}_{k}.
+\]
+
+Приступим к описанию самого фильтра. Он состоит из шага обновления измерения, 
+шага обновления времени. Иногда вводят шаг обновления ковариации. 
+\begin{enumerate}
+	\item Начнём с шага обновления измерения, то есть с перехода от 
+	\(\hat{\mathbf{x}}_{k \mid k - 1}\) к \(\hat{\mathbf{x}}_{k \mid k}\). 
+	Пользуясь свойством 2 и тем, что 
+	\(\E^{\mathbf{L}}[\mathbf{x} \mid \mathbf{Z}_{k}] = \E^{\mathbf{L}} 
+	[\mathbf{x} \mid \tilde{\mathbf{Z}}_{k}]\), получаем, что
+	\[
+		\hat{\mathbf{x}}_{k \mid k} = \E^{\mathbf{L}}[\mathbf{x}_{k} \mid 
+		\mathbf{Z}_{k}] = \E^{\mathbf{L}}[\mathbf{x}_{k} \mid 
+		\tilde{\mathbf{Z}}_{k}] = \E^{\mathbf{L}}[\mathbf{x}_{k} \mid 
+		\tilde{\mathbf{Z}}_{k - 1}] + \E^{\mathbf{L}}[\mathbf{x}_{k} \mid 
+		\tilde{\mathbf{z}}_{k}] - \E{\mathbf{x}_{k}}.
+	\]
+	
+	Это выражение и лежит в основе инновационного подхода. Остальное следует из 
+	прямых вычислений и принципа ортогональности. Для начала заметим, что
+	\[
+		\E^{\mathbf{L}}[\mathbf{x}_{k} \mid \tilde{\mathbf{z}}_{k}] - 
+		\E{\mathbf{x}_{k}} = \cov(\mathbf{x}_{k}, \tilde{\mathbf{z}}_{k}) 
+		\D{\tilde{\mathbf{z}}_{k}}^{-1}\tilde{\mathbf{z}}_{k}.
+	\]
+	
+	Теперь считаем эти ковариации. Начнём с первой:
+	\[
+		\cov(\mathbf{x}_{k}, \tilde{\mathbf{z}}_{k}) = \cov(\mathbf{x}_{k}, 
+		\mathbf{H}_{k} \tilde{\mathbf{x}}_{k \mid k - 1} + \mathbf{v}_{k}) = 
+		\cov(\mathbf{x}_{k}, \tilde{\mathbf{x}}_{k \mid k - 1}) 
+		\mathbf{H}_{k}^{\top} + \cov(\mathbf{x}_{k}, \mathbf{v}_{k}).
+	\]
+	
+	Распишем первый член подробнее. Заметим, что \(\hat{\mathbf{x}}_{k}\) есть 
+	несмещённая оценка \(\mathbf{x}_{k}\). Тогда, добавив принцип 
+	ортогональности, получаем, что
+	\begin{align*}
+		\cov(\mathbf{x}_{k}, \tilde{\mathbf{x}}_{k \mid k - 1}) &= 
+		\E{(\mathbf{x}_{k} - \E{\mathbf{x}_{k}})(\mathbf{x}_{k} - 
+		\hat{\mathbf{x}}_{k \mid k - 1})^{\top}} = \E{\mathbf{x}_{k} 
+		(\mathbf{x}_{k} - \hat{\mathbf{x}}_{k \mid k - 1})^{\top}} = \\
+		&= \E{\mathbf{x}_{k}(\mathbf{x}_{k} - \hat{\mathbf{x}}_{k \mid k - 
+		1})^{\top}} + \left(\E{(\mathbf{x}_{k} - \hat{\mathbf{x}}_{k}) 
+		\hat{\mathbf{x}}_{k \mid k - 1}^{\top}}\right)^{\top} = \\
+		&= \D{\mathbf{x}_{k} - \hat{\mathbf{x}}_{k \mid k - 1}} = \mathbf{P}_{k 
+		\mid k - 1}.
+	\end{align*}
+	Следовательно, так как \(\mathbf{x}_{k}\) не коррелирует с 
+	\(\mathbf{v}_{k}\), то \(\cov(\mathbf{x}_{k}, \tilde{\mathbf{z}}_{k}) = 
+	\mathbf{P}_{k \mid k - 1}\mathbf{H}_{k}^{\top}\). Далее заметим, что 
+	\(\hat{\mathbf{x}}_{k - 1}\) тоже не коррелирует с \(\mathbf{v}_{k}\), так 
+	как зависит только от \(\mathbf{Z}_{k - 1}\) и \(\mathbf{x}_{k}\). 
+	Следовательно,
+	\begin{align*}
+		\D{\tilde{\mathbf{z}}_{k}} = \D{\mathbf{H}_{k} \tilde{\mathbf{x}}_{k 
+		\mid k - 1} + \mathbf{v}_{k}} = \mathbf{H}_{k}\mathbf{P}_{k \mid k - 
+		1}\mathbf{H}_{k}^{\top} + \mathbf{R}_{k} \equiv \mathbf{M}_{k}.
+	\end{align*}
+	
+	Собирая результаты выше в один большой результат, получаем, что
+	\[
+		\hat{\mathbf{x}}_{k \mid k} = \hat{\mathbf{x}}_{k \mid k - 1} + 
+		\mathbf{P}_{k \mid k - 1}\mathbf{H}_{k}^{\top} 
+		\mathbf{M}_{k}^{-1}\tilde{\mathbf{z}}_{k}.
+	\]
+	
+	\item Теперь приступим к шагу обновления времени, то есть к переходу от 
+	\(\hat{\mathbf{x}}_{k \mid k}\) к \(\hat{\mathbf{x}}_{k + 1 \mid k}\). 
+	Распишем:
+	\begin{align*}
+		\hat{\mathbf{x}}_{k + 1 \mid k} &= \E^{\mathbf{L}}[\mathbf{x}_{k + 1} 
+		\mid \mathbf{Z}_{k}] = \E^{\mathbf{L}}[\mathbf{F}_{k}\mathbf{x}_{k} + 
+		\mathbf{G}_{k}\mathbf{w}_{k} \mid \mathbf{Z}_{k}] = \\
+		&= \E{\mathbf{F}_{k}\mathbf{x}_{k} + \mathbf{G}_{k}\mathbf{w}_{k}} + 
+		\cov(\mathbf{F}_{k}\mathbf{x}_{k} + \mathbf{G}_{k}\mathbf{w}_{k}, 
+		\mathbf{Z}_{k})\D{\mathbf{Z}_{k}}^{-1}(\mathbf{Z}_{k} - 
+		\E{\mathbf{Z}_{k}}) = \\
+		&= \mathbf{F}_{k}\E^{\mathbf{L}}[\mathbf{x}_{k} \mid \mathbf{Z}_{k}] + 
+		\mathbf{G}_{k}\E^{\mathbf{L}}[\mathbf{w}_{k} \mid \mathbf{Z}_{k}].
+	\end{align*}
+	
+	Дальше воспользуемся тем, что \(\mathbf{w}_{k}\) не коррелирует с 
+	\(\mathbf{Z}_{k - 1}\), а, следовательно, и с \(\tilde{\mathbf{Z}}_{k - 
+	1}\). Тогда это равно
+	\begin{align*}
+		\hat{\mathbf{x}}_{k + 1 \mid k} &= \mathbf{F}_{k}\E^{\mathbf{L}} 
+		[\mathbf{x}_{k} \mid \mathbf{Z}_{k}] + \mathbf{G}_{k}\E^{\mathbf{L}} 
+		[\mathbf{w}_{k} \mid \tilde{\mathbf{Z}_{k}}] = \\
+		&= \mathbf{F}_{k} \hat{\mathbf{x}}_{k \mid k} + \mathbf{G}_{k} 
+		(\E^{\mathbf{L}}[\mathbf{w}_{k} \mid \tilde{\mathbf{z}}_{k}] + 
+		\E^{\mathbf{L}}[\mathbf{w}_{k} \mid \tilde{\mathbf{Z}}_{k - 1}] = \\
+		&= \mathbf{F}_{k} \hat{\mathbf{x}}_{k \mid k} + \mathbf{G}_{k} 
+		\E^{\mathbf{L}}[\mathbf{w}_{k} \mid \tilde{\mathbf{z}}_{k}].
+	\end{align*}
+	
+	Осталось посчитать \(\E^{\mathbf{L}}[\mathbf{w}_{k} \mid 
+	\tilde{\mathbf{z}}_{k}] = \E{\mathbf{w}_{k}} + \cov(\mathbf{w}_{k}, 
+	\tilde{\mathbf{z}}_{k}) \D{\tilde{\mathbf{z}}_{k}}^{-1} 
+	\tilde{\mathbf{z}}_{k}\). Распишем ковариацию подробнее, пользуясь тем, что 
+	и \(\mathbf{x}_{k}\), и \(\hat{\mathbf{x}}_{k \mid k - 1}\) не коррелируют 
+	с \(\mathbf{w}_{k}\):
+	\begin{align*}
+		\cov(\mathbf{w}_{k}, \tilde{\mathbf{z}}_{k}) &= \cov(\mathbf{w}_{k}, 
+		\mathbf{H}_{k} \tilde{\mathbf{x}}_{k \mid k - 1} + \mathbf{v}_{k}) = 
+		\cov(\mathbf{w}_{k}, \tilde{\mathbf{x}}_{k \mid k - 
+		1})\mathbf{H}^{\top} + \mathbf{S}_{k} = \\
+		&= \cov(\mathbf{w}_{k}, \mathbf{x}_{k}) - \cov(\mathbf{w}_{k}, 
+		\hat{\mathbf{x}}_{k}) + \mathbf{S}_{k} = \mathbf{S}_{k}.
+	\end{align*}
+	
+	Следовательно, шаг обновления времени записывается так:
+	\[
+		\hat{\mathbf{x}}_{k + 1 \mid k} = \mathbf{F}_{k}\hat{\mathbf{x}}_{k 
+		\mid k} + \mathbf{G}_{k}\mathbf{S}_{k}\mathbf{M}_{k}^{-1} 
+		\tilde{\mathbf{z}}_{k}.
+	\]
+	
+	\item Предыдущие шаги можно скомпоновать в один:
+	\[
+		\hat{\mathbf{x}}_{k + 1 \mid k} = \mathbf{F}_{k}\hat{\mathbf{x}}_{k 
+			\mid k - 1} + \mathbf{K}_{k}\tilde{\mathbf{z}}_{k},
+	\]
+	где \(\mathbf{K}_{k} = (\mathbf{F}_{k}\mathbf{P}_{k \mid k - 
+	1}\mathbf{H}_{k}^{\top} + \mathbf{G}_{k}\mathbf{S}_{k}) 
+	\mathbf{M}_{k}^{-1}.\)
+	
+	\item Теперь рассмотрим шаг обновления ковариации, то есть переход от 
+	\(\mathbf{P}_{k \mid k - 1}\) к \(\mathbf{P}_{k + 1 \mid k}\). Стоит 
+	сказать, что переход от \(\mathbf{P}_{k \mid k - 1}\) к \(\mathbf{P}_{k 
+	\mid k}\) полностью соответствует гауссовскому случаю, поэтому мы сразу 
+	смотрим комбинацию переходов. Заметим, что
+	\begin{align*}
+		\tilde{\mathbf{x}}_{k + 1 \mid k} &= \mathbf{x}_{k + 1} - 
+		\hat{\mathbf{x}}_{k + 1 \mid k} = \mathbf{x}_{k + 1} - 
+		\mathbf{F}_{k}\hat{\mathbf{x}}_{k \mid k - 1} - 
+		\mathbf{K}_{k}\tilde{\mathbf{z}}_{k} = \\ 
+		&= \mathbf{F}_{k}\mathbf{x}_{k} + \mathbf{G}_{k}\mathbf{w}_{k} - 
+		\mathbf{F}_{k}\hat{\mathbf{x}}_{k \mid k - 1} - \mathbf{K}_{k} 
+		(\mathbf{H}_{k} \tilde{\mathbf{x}}_{k \mid k - 1} + \mathbf{v}_{k}) = \\
+		&= (\mathbf{F}_{k} - \mathbf{K}_{k}\mathbf{H}_{k})\tilde{\mathbf{x}}_{k 
+		\mid k - 1} + \mathbf{G}_{k}\mathbf{w}_{k} - \mathbf{K}_{k} 
+		\mathbf{v}_{k}.
+	\end{align*}
+	
+	Теперь, пользуясь некоррелированностью \(\tilde{\mathbf{x}}_{k \mid k - 
+	1}\) c \(\mathbf{w}_{k}\) и \(\mathbf{v}_{k}\), получаем, что
+	\begin{align*}
+		\mathbf{P}_{k + 1 \mid k} &= \D{(\mathbf{F}_{k} - \mathbf{K}_{k} 
+		\mathbf{H}_{k})\tilde{\mathbf{x}}_{k \mid k - 1}} + \D{\mathbf{G}_{k} 
+		\mathbf{w}_{k} - \mathbf{K}_{k}\mathbf{v}_{k}} = \\
+		&= (\mathbf{F}_{k} - \mathbf{K}_{k}\mathbf{H}_{k})\mathbf{P}_{k \mid k 
+		- 1}(\mathbf{F}_{k} - \mathbf{K}_{k}\mathbf{H}_{k})^{\top} + 
+		\D{\mathbf{G}_{k} \mathbf{w}_{k} - \mathbf{K}_{k}\mathbf{v}_{k}}.
+	\end{align*}
+	
+	Значение второго члена получить несложно, но формула для него достаточно 
+	длинная. Запишем её без доказательства:
+	\[
+		\D{\mathbf{G}_{k} \mathbf{w}_{k} - \mathbf{K}_{k}\mathbf{v}_{k}} = 
+		\mathbf{G}_{k}\mathbf{Q}_{k}\mathbf{G}_{k}^{\top} + 
+		\mathbf{K}_{k}\mathbf{R}_{k}\mathbf{K}_{k}^{\top} - 
+		\mathbf{G}_{k}\mathbf{S}_{k}\mathbf{K}_{k}^{\top} - 
+		\mathbf{K}_{k}\mathbf{S}_{k}^{\top}\mathbf{G}_{k}^{\top}.
+	\]
+\end{enumerate}
+
+\begin{leftbar}
+\begin{small}
+	Определения и результаты, связанные с линейными оценками, можно хорошо 
+	интерпретировать с помощью гильбертовых пространств. 
+	
+	Пусть, для простоты, все случайные величины (то есть, \(\mathbf{w}_{k}\), 
+	\(\mathbf{v}_{k}\) и \(\mathbf{x}_{0}\)) имеют нулевое матожидание.
+	
+	Напомню, что гильбертово пространство~--- это полное пространство со 
+	скалярным произведением. Другими словами, это линейное пространство 
+	\(V\) (для простоты скажем, что над \(\R\)) с определённой на нём операцией 
+	скалярного произведения \(\langle\cdot, \cdot\rangle : V \times V \mapsto 
+	\R\), которая обладает следующими свойствами:
+	\begin{enumerate}
+		\item Оно линейно по первому аргументу: для любых \(\alpha, \beta 
+		\in \R\), \(x, y, z \in V\)
+		\[
+			\langle \alpha x + \beta y, z\rangle = \alpha\langle x, z\rangle + 
+			\beta\langle y, z\rangle.
+		\]
+		\item Оно симметрично: для любых \(x, y \in V\) \(\langle x, y\rangle 
+		= \langle y, x\rangle\).
+		
+		\item Оно положительно определено: для любого \(x \in V\) \(\langle x, 
+		x \rangle \geq 0\), причём \(\langle x, x \rangle = 0 \iff x = 0\).
+	\end{enumerate}
+	
+	Полнота означает, что любая фундаментальная (т.е. для которой выполнено 
+	условие Коши) последовательность имеет предел. Далее, это скалярное 
+	произведение порождает норму: \(\|x\| = \sqrt{\langle x, x\rangle}\). 
+	Теперь выпишем несколько стандартных утверждений из линейной алгебры:
+	\begin{itemize}
+		\item \emph{Подпространство} \(S\)~--- это замкнутое относительно 
+		линейных преобразований подмножество \(V\). Другими словами, оно 
+		является линейной оболочкой каких-то векторов \(\{v_{\alpha}\}\).
+		
+		\item \emph{Ортогональная проекция} \(\Pi_{S}v\) вектора \(v\) на 
+		подпространство \(S\)~--- это ближайший к \(v\) элемент из \(S\), то 
+		есть это вектор \(w \in S\), который минимизирует \(\|v - w\|\). Такой 
+		вектор действительно существует и для него верно, что \(v - \Pi_{S}v 
+		\perp S\), то есть \(\langle v - \Pi_{S}v, w\rangle = 0\) для любого 
+		\(w \in S\).
+		
+		\item Если \(S = \spanset(s_{1}, \ldots, s_{n})\), то 
+		\[
+			\Pi_{S}v = \sum_{k = 1}^{n}\alpha_{k}s_{k}, \text{ где }
+			\begin{pmatrix}
+			\alpha_{1} & \ldots & \alpha_{n}
+			\end{pmatrix}
+			=
+			\begin{pmatrix}
+			\langle v, s_{1} \rangle & \ldots & \langle v, s_{1} \rangle
+			\end{pmatrix}
+			\begin{pmatrix}
+			\langle s_{1}, s_{1} \rangle & \ldots & \langle s_{1}, s_{n} 
+			\rangle \\
+			\vdots & \ddots & \vdots \\
+			\langle s_{n}, s_{1} \rangle & \ldots & \langle s_{n}, s_{n} \rangle
+			\end{pmatrix}^{-1}
+		\]
+		
+		Если \((s_{1}, \ldots, s_{n})\)~--- это ортогональный базис \(S\), то
+		\[
+			\Pi_{S}v = \sum_{k = 1}^{n}\langle v, s_{k} \rangle \langle s_{k}, 
+			s_{k} \rangle^{-1}s_{k}.
+		\]
+		
+		\item Если \(S = S_{1} \oplus S_{2}\) (то есть, \(S\) есть прямая сумма 
+		двух ортогональных подпространств \(S_{1}\) и \(S_{2}\)), то \(\Pi_{S}v 
+		= \Pi_{S_{1}}v + \Pi_{S_{2}}v\).
+		
+		\item Если есть набор линейно независимых векторов \(\{v_{1}, v_{2}, 
+		\ldots\}\), то его можно превратить в ортогональный базис, используя 
+		\emph{процесс Грама-Шмидта}:
+		\[
+			\tilde{v}_{k} = v_{k} - \Pi_{\spanset(v_{1}, \ldots, v_{k - 
+			1})}v_{k} = v_{k} - \sum_{i = 1}^{k - 1}\langle v_{k}, 
+			\tilde{v}_{i}\rangle \langle \tilde{v}_{i}, 
+			\tilde{v}_{i}\rangle^{-1} \tilde{v}_{i}.
+		\]
+	\end{itemize}
+
+	Теперь можно провести аналогию между полученными ранее результатами, 
+	связанными с линейными оценками, с этими фактами, заметив следующее:
+	\begin{itemize}
+		\item В качестве гильбертова пространства возьмём пространство 
+		случайных векторов, для которых \(\E{\mathbf{x}} = \mathbf{0}\) и 
+		\(\E{\mathbf{x}^{\top}\mathbf{x}} < +\infty\). В таком случае скалярное 
+		произведение задаётся следующим образом: \(\langle \mathbf{x}, 
+		\mathbf{y} \rangle = \E{\mathbf{x}^{\top}\mathbf{y}} = 
+		\tr{\E{\mathbf{x}\mathbf{y}^{\top}}}\).
+		
+		\item Оптимальная линейная оценка \(\E^{\mathrm{L}}[\mathbf{x} \mid 
+		\mathbf{Z}_{k}]\) является ничем иным, как ортогональная проекция
+		\(\mathbf{x}\) на линейную оболочку векторов \((\mathbf{z}_{1}, \ldots, 
+		\mathbf{z}_{k})\) (почему?).
+		
+		\item Процесс инноваций \(\{\tilde{\mathbf{z}}_{k}\}\) есть 
+		ортогонализированная версия процесса \(\{\mathbf{z}_{k}\}\).
+	\end{itemize}
+
+	Формулировка через гильбертовы пространства может дать несколько хороших 
+	идей и результатов (особенно в случае с непрерывным временем, так 
+	называемым фильтром Калмана-Бьюси). Но мы остановимся на этом.
+\end{small}
+\end{leftbar}
+
+\subsection{Фильтр Калмана и метод наименьших квадратов}
+Рассмотрим следующую задачу оптимизации: на переменные 
+\(\mathbf{x}_{0}, \ldots, \mathbf{x}_{k}\) и \(\mathbf{w}_{0}, \ldots, 
+\mathbf{w}_{k - 1}\) наложены следующие ограничения:
+\[
+	\mathbf{x}_{i + 1} = \mathbf{F}_{i}\mathbf{x}_{i} + 
+	\mathbf{G}_{i}\mathbf{w}_{i}, \quad i \in \{0, 1, \ldots, k - 1\}.
+\]
+
+Далее, платёжная функция, которую нужно минимизировать, равна
+\[
+	J_{k} = \frac{1}{2}(\mathbf{x}_{0} - \overline{\mathbf{x}}_{0})^{\top} 
+	\mathbf{P}_{0}^{-1}(\mathbf{x}_{0} - \overline{\mathbf{x}}_{0}) + 
+	\frac{1}{2}\sum_{i = 0}^{k}(\mathbf{z}_{i} - \mathbf{H}_{i} 
+	\mathbf{x}_{i})^{\top}\mathbf{R}_{i}^{-1}(\mathbf{z}_{i} - \mathbf{H}_{i} 
+	\mathbf{x}_{i}) + \frac{1}{2}\sum_{i = 0}^{k - 
+	1}\mathbf{w}_{i}^{\top}\mathbf{Q}_{i}^{-1}\mathbf{w}_{i}.
+\]
+
+В этой задаче \(\overline{\mathbf{x}}_{0}\), \(\{\mathbf{z}_{k}\}\)~--- это 
+известные векторы, а \(\mathbf{P}_{0}\), \(\mathbf{R}_{k}\) и 
+\(\mathbf{Q}_{k}\)~--- положительно определённые симметричные матрицы.
+
+Пусть \(\mathbf{x}_{0}^{(k)}, \ldots, \mathbf{x}_{k}^{(k)}\)~--- это 
+оптимальное решение задачи. Утверждается, что \(\mathbf{x}_{k}^{(k)}\) можно 
+вычислить точно так же, как вычисляется \(\hat{\mathbf{x}}_{k \mid k}\) в 
+фильтре Калмана.
+
+Этот результат можно получить в лоб, расписывая решение методом наименьших 
+квдаратов для \(k - 1\) и \(k\) и преобразованиями матриц. Но мы пойдём проще, 
+используя гауссовский подход.
+
+\begin{theorem}
+	Оптимальное решение \(\mathbf{x}_{0}^{(k)}, \ldots, \mathbf{x}_{k}^{(k)}\) 
+	описанной выше задачи оптимизации является максимизатором условной 
+	вероятности (другими словами, это оценка апостериорного максимума, или 
+	MAP-оценка)
+	\[
+		(\mathbf{x}_{0}^{(k)}, \ldots, \mathbf{x}_{k}^{(k)}) = 
+		\arg\max_{\mathbf{x}_{0}, \mathbf{x}_{1}, \ldots, \mathbf{x}_{k}} 
+		p(\mathbf{x}_{0}, \mathbf{x}_{1}, \ldots, \mathbf{x}_{k} \mid 
+		\mathbf{Z}_{k}),
+	\]
+	которая связана с следующей гауссовской моделью:
+	\begin{align*}
+		\mathbf{x}_{k + 1} &= \mathbf{F}_{k}\mathbf{x}_{k} + \mathbf{G}_{k} 
+		\mathbf{w}_{k},& \mathbf{x}_{0} \sim \mathcal{N}(\mathbf{0}, 
+		\mathbf{P}_{0}), \mathbf{w}_{k} \sim \mathcal{N}(\mathbf{0}, 
+		\mathbf{Q}_{k}) \\
+		\mathbf{z}_{k + 1} &= \mathbf{H}_{k}\mathbf{x}_{k} + \mathbf{v}_{k}&
+		\mathbf{v}_{k} \sim \mathcal{N}(\mathbf{0}, 
+		\mathbf{R}_{k})
+	\end{align*}
+	Для этой модели \(\{\mathbf{w}_{k}\}\) и \(\{\mathbf{v}_{k}\}\)~--- белые 
+	шумы, не зависящие от начального условия \(\mathbf{x}_{0}\), матожидание 
+	которого равно \(\overline{\mathbf{x}}_{0}\).
+\end{theorem}
+\noindent\textit{Указание.} Распишите \(p(\mathbf{x}_{0}, \mathbf{x}_{1}, 
+\ldots, \mathbf{x}_{k}, \mathbf{Z}_{k})\).
+
+Теперь нужно указать ещё один факт (без доказательства):
+\begin{theorem}
+	Для таких гауссовских моделей MAP = MMSE.
+\end{theorem}
+
+Из указанных выше фактов следует то, что \(\mathbf{x}_{k}^{(k)} = 
+\mathbf{x}_{k}^{+}\), что и требовалось доказать.
