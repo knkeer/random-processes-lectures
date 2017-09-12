@@ -70,8 +70,11 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ПАРАМЕТРЫ 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\mathtoolsset{showonlyrefs=true}    % Показывать номера только у тех формул,
+%\mathtoolsset{showonlyrefs=true}    % Показывать номера только у тех формул,
                                     % на которые есть \eqref{} в тексте.
+
+\numberwithin{equation}{section}
+                                    
 %% Сброс счётчиков 
 \makeatletter
 \@addtoreset{theorem}{chapter}      % Счётчик теорем          
@@ -109,8 +112,9 @@
 \hypersetup{footnotecolor=blue}         % Цвет ссылок на заметку
 \fancyfoot{}                            % Сброс параметров нижнего колонтитула
 \fancyhead[RO,LE]{\thepage}             % Номер страницы
-\fancyhead[LO]{\leftmark}               % Левая пометка (глава)
-\fancyhead[RE]{\rightmark}              % Правая пометка (секция)
+\fancyhead[LO,RE]{}
+%\fancyhead[LO]{\leftmark}               % Левая пометка (глава)
+%\fancyhead[RE]{\rightmark}              % Правая пометка (секция)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -122,8 +126,7 @@
 \newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
 % Круглые и квадратные скобки
 \providecommand\given{}
-\DeclarePairedDelimiterX\brackets[1]
-{(}{)}{
+\DeclarePairedDelimiterX\brackets[1]{(}{)}{
     \renewcommand\given{  \nonscript\:
         \delimsize\vert
         \nonscript\:
@@ -175,6 +178,9 @@
 \newcommand{\Law}{\operatorname{Law}}
 \newcommand{\tr}{\operatorname{tr}}
 \newcommand{\spanset}{\operatorname{span}}
+
+\newcommand{\esssup}{\operatornamewithlimits{ess\hspace{2pt}sup}}
+\newcommand{\supvrai}{\operatornamewithlimits{sup\hspace{1pt}vrai}\hspace{0.5pt}}
 
 %% Канторова лестница
 \tikzset{

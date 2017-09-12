@@ -1,0 +1,1092 @@
+\section{Ключевые статистики и тесты в теории принятия решений. Дискретное 
+время}
+\subsection{Лемма Неймана-Пирсона}
+Наша ближайшая цель состоит в том, чтобы естественным образом подойти к 
+описанию тех <<достаточных>> статистик от наблюдаемых данных, на основании 
+которых принимаются <<оптимальные>> решения.
+
+Начнём с задачи различения двух гипотез. Пусть \((\xi_{1}, \xi_{2} \ldots, 
+\xi_{n}, \ldots)\)~--- независимые и одинаково распределённые случайные 
+величины. Над ними было проведено наблюдение и в результате получилась 
+реализация \((x_{1}, x_{2}, \ldots, x_{n}, \ldots)\). Но нужно уточнить, что 
+понимать в данном случае под <<независимостью и одинаковой распределённостью>>.
+
+Пусть \((\Omega, \F)\)~--- измеримое пространство (пространство элементарных 
+исходов и сигма-алгебра событий). На нём вводится две вероятностные меры 
+\(\Pr_{0}\) и \(\Pr_{\infty}\). Предположение независимости случайных величин 
+\((\xi_{1}, \xi_{2} \ldots, \xi_{n}, \ldots)\) означает независимость 
+относительно обеих мер, то есть для любого \(n \in \N\) и любых \(A_{1}, 
+\ldots, A_{n} \in \B(\R)\) (будем считать, что мы смотрим на одномерные 
+случайные величины)
+\[
+	\Pr_{\theta}(\xi_{1} \in A_{1}, \ldots, \xi_{n} \in A_{n}) = 
+	\Pr_{\theta}(\xi_{1} \in A_{1}) \cdot \ldots \cdot \Pr_{\theta}(\xi_{n} \in 
+	A_{n}), \text{ где } \theta = 0 \text{ или } \infty.
+\]
+
+Далее мы будем считать, что случайные величины \(\xi_{k}\) имеют функции 
+распределения \(F = F_{\theta}(x) (= \Pr_{\theta}(\xi_{k} \leq x))\), у которых 
+есть плотность \(f = f_{\theta}(x)\):
+\[
+	\diff F_{\theta}(x) = f_{\theta}(x)\mu(\diff x),
+\]
+где \(\mu\)~--- некоторая (\(\sigma\)-конечная) мера. В качестве такой меры 
+всегда можно взять \(\mu(\diff x) = (\Pr_{0}(\diff x) + \Pr_{\infty}(\diff 
+x))/2\). Впрочем, часто будем полагать, что \(\mu(\diff x) = \diff x\), то есть 
+\(\mu\)~--- это мера Лебега (в этом случае говорят, что функция распределения 
+\emph{абсолютно непрерывна}).
+
+Из независимости и одинаковой распределённости следует, что плотность 
+\(p_{\theta}(x_{1}, \ldots, x_{n})\) совместного распределения \(F_{\theta} 
+(x_{1}, \ldots, x_{n}) = \Pr_{\theta}(\xi_{1} \leq x_{1}, \ldots, \xi_{n} \leq 
+x_{n})\) равна%
+\footnote{В дискретном случае полагайте, что \(f_{\theta}(x) = 
+\Pr_{\theta}(\xi_{1} = x)\).}
+\begin{equation}\label{eq:density-independent}
+	p_{\theta}(x_{1}, \ldots, x_{n}) = f_{\theta}(x_{1}) \ldots 
+	f_{\theta}(x_{n})
+\end{equation} 
+
+Одну из главных ролей будет играть \emph{отношение правдоподобия}, которое 
+вводилось в курсе математической статистики:
+\begin{equation}
+	L_{n} = \frac{f_{0}(x_{1}) f_{0}(x_{2})\ldots f_{0}(x_{n})} 
+	{f_{\infty}(x_{1}) f_{\infty}(x_{2}) \ldots f_{\infty}(x_{n})}.
+\end{equation}
+
+Как вам известно, оно проявляется в задаче различения двух простых гипотез 
+\(H_{0}\) и \(H_{\infty}\) о том, какую плотность, \(f_{0}\) или же 
+\(f_{\infty}\), имеют наблюдаемые случайные величины \(\xi_{1}, \ldots, 
+\xi_{N}\). Решение этой задачи даёт \emph{лемма Неймана-Пирсона}, один из 
+вариантов которой состоит в следующем.
+
+Пусть есть \(N\) наблюдений \(x_{1}, \ldots, x_{N}\) над случайными величинами 
+\(\xi_{1}, \ldots, \xi_{N}\). По этим наблюдениям нужно сделать вывод, какая из 
+гипотез~--- \(H_{0}\) (\(\theta = 0\)) или же \(H_{\infty}\) (\(\theta = 
+\infty\))~--- имеет место. Будем предполагать, что соответствующими плотностями 
+функций распределения \(F_{\theta}(x_{1}, \ldots, x_{N})\) являются 
+\(p_{\theta}(x_{1}, \ldots, x_{N})\):
+\[
+	F_{\theta}(x_{1}, \ldots, x_{N}) = \int\limits_{-\infty}^{x_{1}} \cdots 
+	\int\limits_{-\infty}^{x_{N}} p_{\theta}(y_{1}, \ldots, y_{N})\mu(\diff 
+	y_{1}, \ldots, \diff y_{N}),
+\]
+где \(\mu\)~--- некоторая \(\sigma\)-конечная мера на \(\B(\R)\). В случае, 
+когда \(\xi_{k}\) независимы и одинаково распределены плотности \(p_{\theta}\) 
+(по мере \(\mu(\diff y_{1}, \ldots, \diff y_{N}) = \mu(\diff y_{1}) \ldots 
+\mu(\diff y_{N})\)) задаются формулой \eqref{eq:density-independent}.
+
+С задачей различения двух гипотез связано одно определение:
+\begin{definition}
+	Всякую (измеримую) функцию \(d(x_{1}, \ldots, x_{N})\), принимающую два 
+	значения: \(\mathbb{H}_{0}\) (верна гипотеза \(H_{0}\)) и 
+	\(\mathbb{H}_{\infty}\) (верна гипотеза \(H_{\infty}\)), будем называть 
+	\emph{решающей функцией}.
+\end{definition}
+Наряду с решающей функцией в статистике вводятся понятия ошибок первого и 
+второго рода.
+\begin{definition}
+	Пусть \(d(x_{1}, \ldots, x_{N})\)~--- решающая функция. Вероятностью 
+	\emph{ошибки первого рода} \(\alpha(d)\) будем называть \(\alpha(d) = 
+	\Pr{\text{приняли } H_{0} \given \text{верна } H_{\infty}}\). Аналогично, 
+	вероятность \emph{ошибки второго рода} \(\beta(d)\) равна \(\beta(d) = 
+	\Pr{\text{приняли } H_{\infty} \given \text{верна } H_{0}}\).
+	% какая-то херня происходит с обозначениями
+\end{definition}
+
+Как же выбрать <<оптимальное>> решающее правило \(d\)? В данном случае не 
+понятно, что вкладывается в слово <<оптимальное>>~--- больно много трактовок. 
+Будем считать, что в нашем случае <<оптимальность>> означает следующее: 
+решающее правило \(d^{*}\) считается оптимальным, если сумма вероятностей 
+ошибок первого и второго рода минимальна:
+\begin{equation}
+	\alpha(d^{*}) + \beta(d^{*}) = \inf\limits_{d}[\alpha(d) + \beta(d)] 
+	\overset{\bigtriangleup}{=} \mathrm{Er}(N; H_{0}, H_{\infty}).
+\end{equation}
+
+\begin{leftbar}
+\begin{small}
+	Стоит заметить, что \(\mathrm{Er}(N; H_{0}, H_{\infty})\) можно посчитать 
+	по следующей формуле:
+	\[
+		\mathrm{Er}(N; H_{0}, H_{\infty}) = 1 - \frac{1}{2}\|\Pr_{0}^{(N)} - 
+		\Pr_{\infty}^{(N)}\|,
+	\]
+	где \(\Pr_{\theta}^{(N)}(\diff x_{1}, \ldots, \diff x_{N}) = 
+	f_{\theta}(x_{1}) \ldots f_{\theta}(x_{N})\diff x_{1} \ldots \diff x_{N}\), 
+	а \(\| \cdot \|\) есть вариация меры (со знаком): 
+	\[
+		\|Q\| \overset{\bigtriangleup}{=} 2\sup_{A} |Q(A)|.
+	\]
+	
+	Из этого можно сделать следующий неформальный вывод: если меры 
+	\(\Pr_{0}^{(N)}\) и \(\Pr_{\infty}^{(N)}\) <<сидят>> на разных множествах, 
+	то \(\|\Pr_{0}^{(N)} - \Pr_{\infty}^{(N)}\| = 2\) и \(\mathrm{Er}(N; H_{0}, 
+	H_{\infty}) = 0\). Это означает, что возможно безошибочное разделение 
+	гипотез. Если же меры близки, то то \(\|\Pr_{0}^{(N)} - 
+	\Pr_{\infty}^{(N)}\| \sim 0\) и \(\mathrm{Er}(N; H_{0}, H_{\infty}) \sim 
+	1\). 
+\end{small}
+\end{leftbar}
+
+Есть ещё одна формулировка, которую обычно называют \emph{условной}. Пусть 
+\(D_{a} = \{d: \alpha(d) \leq a\}\)~--- множество решающих правил с 
+вероятностью ошибки первого рода не больше \(a\). Требуется найти \(d_{a}^{*}\) 
+из \(D_{a}\) (если такое существует), что оно минимизирует вероятность ошибки 
+второго рода:
+\begin{equation}
+	\beta(d_{a}^{*}) = \inf\limits_{d \in D_{a}} \beta(d).
+\end{equation}
+
+Теперь уместно рассказать о \emph{рандомизированных} решающих правилах. Пусть 
+\(\phi = \phi(x_{1}, \ldots, x_{N})\) принимает значения в \([0, 1]\). Будем 
+интерпретировать \(\phi(x_{1}, \ldots, x_{N})\), как вероятность принять 
+гипотезу \(H_{0}\), если были получены наблюдения \(x_{1}, \ldots, x_{N}\) над 
+случайными величинами \(\xi_{1}, \ldots, \xi_{N}\). Теперь введём два 
+обозначения, считая, что \(\E_{\theta}\) есть матожидание, взятое по 
+вероятностной мере 
+\(\Pr_{\theta}\),
+\begin{align*}
+	\alpha(\phi) = \E_{\infty}[\phi(\xi_{1}, \ldots, \xi_{N})], \quad 
+	\beta(\phi) = \E_{0}[1 - \phi(\xi_{1}, \ldots, \xi_{N})].
+\end{align*}
+Несложно понять, что это есть ни что иное, как вероятности ошибок первого и 
+второго рода соответственно.
+
+Оптимальность в данном случае вводится почти так же, как в условной 
+формулировке. Пусть \(\Phi_{a} = \{\phi : \alpha(\phi) \leq a\}\)~--- множество 
+рандомизированных критериев с вероятностью ошибки первого рода не больше \(a\). 
+Тогда решающая функция \(\phi_{a}^{*}\) будет называться оптимальным 
+(рандомизированным) тестом, если 
+\begin{equation}\label{eq:optimal-random-test}
+	\beta(\phi_{a}^{*}) = \inf\limits_{\phi \in \Phi_{a}} \beta(\phi).
+\end{equation}
+
+А теперь можно дать лемму Неймана-Пирсона:
+\begin{lemma}[Нейман, Пирсон]
+	Для любого \(a \in [0, 1]\) найдутся такие константы \(\lambda_{a}^{*}\) и 
+	\(h_{a}^{*}\), что рандомизированный критерий
+	\begin{equation}\label{eq:neyman-pearson-criterion}
+		\phi^{*}(x_{1}, \ldots, x_{N}) = 
+		\begin{cases}
+			1, & p_{0}(x_{1}, \ldots, x_{N}) > h_{a}^{*}p_{\infty}(x_{1}, 
+			\ldots, x_{N}), \\
+			\lambda_{a}^{*}, & p_{0}(x_{1}, \ldots, x_{N}) = 
+			h_{a}^{*}p_{\infty}(x_{1}, \ldots, x_{N}), \\
+			0, & p_{0}(x_{1}, \ldots, x_{N}) < h_{a}^{*}p_{\infty}(x_{1}, 
+			\ldots, x_{N}) \\
+		\end{cases}
+	\end{equation}
+	является оптимальным в классе \(\Phi_{a}\).
+\end{lemma}
+
+Из \eqref{eq:neyman-pearson-criterion} понятно, что ключевая статистика в лемме 
+Неймана-Пирсона~--- это отношение правдоподобия (если знаменатель не обращается 
+в ноль, конечно):
+\begin{equation}\label{eq:likelihood-ratio}
+	L_{N} = \frac{p_{0}(x_{1}, \ldots, x_{N})}{p_{\infty}(x_{1}, \ldots, 
+	x_{N})}.
+\end{equation}
+
+Казалось бы, зачем вводятся рандомизированные тесты? Оказывается, что инфинум в 
+\eqref{eq:optimal-random-test} достигается на тесте, для которого вероятность 
+ошибки первого рода \emph{в точности} равна \(a\). Этого, в общем случае, 
+нельзя достичь без рандомизированных критериев, что будет \emph{явно} 
+использоваться при доказательстве леммы.
+\begin{proof}
+	Для начала предположим, что мы нашли \(\lambda_{a}^{*}\) и \(h_{a}^{*}\) 
+	для критерия \eqref{eq:neyman-pearson-criterion} такие, что 
+	\(\E_{\infty}[\phi^{*}(\xi_{1}, \ldots, \xi_{N})] = a\). Докажем, что для 
+	любого другого критерия \(\phi\) из класса \(\Phi_{a}\) вероятность ошибки 
+	второго рода не меньше:
+	\begin{equation}\label{eq:neyman-pearson-error-inequality}
+		\beta(\phi^{*}) = \E_{0}[1 - \phi^{*}(\xi_{1}, \ldots, \xi_{N})] \leq 
+		\E_{0}[1 - \phi(\xi_{1}, \ldots, \xi_{N})] = \beta(\phi).
+	\end{equation}
+	Это, в свою очередь, равносильно тому, что 
+	\[
+		\E_{0}[\phi^{*}(\xi_{1}, \ldots, \xi_{N})] \geq \E_{0}[\phi(\xi_{1}, 
+		\ldots, \xi_{N})].
+	\]
+	
+	Распишем разность матожиданий:
+	\[
+		\E_{0}[\phi^{*}(\xi_{1}, \ldots, \xi_{N}) - \phi(\xi_{1}, 
+		\ldots, \xi_{N})] = \int\limits_{\R^{N}} (\phi^{*}(\mathbf{x}) - 
+		\phi(\mathbf{x}))p_{0}(\mathbf{x})\mu(\diff \mathbf{x}),
+	\]
+	где \(\mu(\diff \mathbf{x}) = \mu(\diff x_{1}, \ldots, \diff x_{N})\).
+	
+	Теперь сделаем детур и докажем, что
+	\begin{equation}\label{neyman-pearson-inequality-2}
+		\int\limits_{\R^{N}} (\phi^{*}(\mathbf{x}) - \phi(\mathbf{x})) 
+		(p_{0}(\mathbf{x}) - h_{a}^{*}p_{\infty}(\mathbf{x}))\mu(\diff 
+		\mathbf{x}) \geq 0.
+	\end{equation}
+	
+	Действительно, разобъём его на два (для компактности опустим аргументы 
+	функций):
+	\begin{align*}
+		\int\limits_{\R^{N}} (\phi^{*} - \phi)(p_{0} - h_{a}^{*}p_{\infty}) 
+		\mu(\diff \mathbf{x}) &= \int\limits_{\{\mathbf{x} \in 
+		\R^{N}\,:\,\phi^{*} > \phi\}} (\phi^{*} - \phi)(p_{0} - 
+		h_{a}^{*}p_{\infty}) \mu(\diff \mathbf{x}) + \\
+		&+ \int\limits_{\{\mathbf{x} \in \R^{N}\,:\,\phi^{*} < \phi\}} 
+		(\phi^{*} - \phi)(p_{0} - h_{a}^{*}p_{\infty}) \mu(\diff \mathbf{x}).
+	\end{align*}
+	
+	Мы можем сказать, что на множестве \(\{\mathbf{x} \in \R^{N} : \phi^{*} > 
+	\phi\}\) критерий не обращается в ноль: \(\phi^{*} > 0\) (так как \(\phi\) 
+	принимает значения в \([0, 1]\)). Если \(\phi^{*} > 0\), то из определения 
+	критерия получаем, что \(p_{0} \geq h_{a}^{*}p_{\infty}\). Отсюда получаем, 
+	что первый интеграл неотрицателен.
+	
+	Аналогично, мы можем сказать, что на множестве \(\{\mathbf{x} \in 
+	\R^{N}\,:\,\phi^{*} < \phi\}\) критерий не обращается в единицу: \(\phi^{*} 
+	< 1\). Следовательно, \(p_{0} \leq h_{a}^{*}p_{\infty}\) и второй интеграл 
+	тоже неотрицателен. Комбинируя эти результаты, получаем утверждение 
+	\eqref{neyman-pearson-inequality-2}. Из него сразу же получается 
+	\eqref{eq:neyman-pearson-error-inequality}:
+	\begin{align}
+		\int\limits_{\R^{N}} (\phi^{*} - \phi)p_{0}\mu(\diff \mathbf{x}) \geq 
+		h_{a}^{*} \int\limits_{\R^{N}} (\phi^{*} - \phi)p_{\infty}\mu(\diff 
+		\mathbf{x}) = h_{a}^{*}(\E_{\infty}[\phi^{*}] - \E_{\infty}[\phi]) \geq 
+		0.
+	\end{align}
+	
+	Рассуждение выше опиралось на то, что существуют такие \(\lambda_{a}^{*}\) 
+	и \(h_{a}^{*}\), что вероятность ошибки первого рода равна \(a\): 
+	\(\E_{\infty}[\phi^{*}(\xi_{1}, \ldots, \xi_{N})] = a\). Теперь докажем, 
+	что они действительно существуют.
+	
+	Введём функцию \(g(h) = \Pr_{\infty}(p_{0}(\bm{\xi}) > 
+	hp_{\infty}(\bm{\xi}))\), где \(\bm{\xi} = (\xi_{1}, \ldots, \xi_{N})\). 
+	Что мы можем сказать про эту функцию? На самом деле много: она не 
+	возрастает, она непрерывна справа, \(g(h) = 1\) при \(h < 0\) и \(g(h) \to 
+	0\) при \(h \to \infty\). Далее, заметим, что
+	\begin{equation}
+		g(h) = \int\limits_{\left\{\mathbf{x} \in 
+		\R^{N}\,:\,\frac{p_{0}(\mathbf{x})}{p_{\infty}(\mathbf{x})} > 
+		h\right\}} p_{\infty}(\mathbf{x})\mu(\diff \mathbf{x}).
+	\end{equation}
+	
+	Для \(a \in (0, 1)\) положим \(h_{a}^{*}\), равным минимальному \(h\), для 
+	которого выполнено \(g(h) \leq a \leq g(h - 0)\). Далее, положим
+	\begin{equation}
+		\lambda_{a}^{*} = \frac{a - g(h_{a}^{*})}{g(h_{a}^{*} - 0) - 
+		g(h_{a}^{*})}.
+	\end{equation}
+	
+	Теперь покажем, что с такими значениями \(\E_{\infty}[\phi^{*}] = a\). 
+	Действительно,
+	\begin{align*}
+		\E_{\infty}[\phi^{*}] &= \int\limits_{\R^{N}} \phi^{*}(\mathbf{x}) 
+		p_{\infty}(\mathbf{x})\mu(\diff \mathbf{x}) = \int\limits_{\left 
+		\{\mathbf{x} \in \R^{N}\,:\,\frac{p_{0}(\mathbf{x})} {p_{\infty} 
+		(\mathbf{x})} \geq h_{a}^{*}\right\}} \phi^{*}(\mathbf{x}) 
+		p_{\infty}(\mathbf{x})\mu(\diff \mathbf{x}) = \\
+		&= \int\limits_{\left \{\mathbf{x} \in \R^{N}\,:\,\frac{p_{0} 
+		(\mathbf{x})} {p_{\infty}(\mathbf{x})} > h_{a}^{*}\right\}} 
+		p_{\infty}(\mathbf{x})\mu(\diff \mathbf{x}) + 
+		\lambda_{a}^{*}\int\limits_{\left\{\mathbf{x} \in 
+		\R^{N}\,:\,\frac{p_{0} (\mathbf{x})} {p_{\infty}(\mathbf{x})} = 
+		h_{a}^{*}\right\}} p_{\infty}(\mathbf{x})\mu(\diff \mathbf{x}) = \\
+		&= g(h_{a}^{*}) + \frac{a - g(h_{a}^{*})}{g(h_{a}^{*} - 0) - 
+		g(h_{a}^{*})}[g(h_{a}^{*} - 0) - g(h_{a}^{*})] = a.
+	\end{align*}
+	
+	Теперь нужно описать граничные случаи. Если \(a = 0\), то ошибок первого 
+	рода быть не должно. Как этого достичь? Всегда принимать \(H_{\infty}\). 
+	Другими словами, полагаем, что \(\phi^{*}(\mathbf{x}) = 0\) и \(h_{a}^{*} = 
+	\infty\). Аналогично, для \(a = 1\) мы должны всегда принимать \(H_{0}\). 
+	Следовательно, нужно положить \(h_{a}^{*} = 0\) и \(\lambda_{a}^{*} = 1\).
+	
+	Тем самым был получен тест \(\phi^{*}\), для которого 
+	\(\E_{\infty}[\phi^{*}] = a\) и он является оптимальным в классе 
+	\(\Phi_{a}\).
+\end{proof}
+
+\begin{remark}
+	В случае, когда случайные величины \(\xi_{1}, \ldots, \xi_{N}\) независимы 
+	и одинаково распределены, для совместной плотности верна формула 
+	\eqref{eq:density-independent}. В этом случае удобно ввести следующие 
+	обозначения:
+	\[
+		\zeta_{k} = \log \frac{f_{0}(x_{k})}{f_{\infty}(x_{k})}  \text{ и } 
+		Z_{k} = \log L_{n} = \sum_{k = 1}^{n} \zeta_{k}.
+	\]
+\end{remark}
+
+Теперь рассмотрим пару примеров применения леммы Неймана-Пирсона.
+\begin{example}[Бернуллиевские случайные величины]
+	Пусть гипотезы \(H_{0}\) и \(H_{\infty}\) утверждают,  что \(\xi_{1}, 
+	\ldots, \xi_{N}\)~--- выборка из распределения Бернулли 
+	\(\mathrm{Bern}(p_{0})\) или \(\mathrm{Bern}(p_{\infty})\) соответственно, 
+	то есть для любого \(1 \leq k \leq N\)
+	\[
+		\Pr_{\theta}(\xi_{k} = 1) = p_{\theta},
+		\quad
+		\Pr_{\theta}(\xi_{k} = 0) = 1 - p_{\theta} \equiv q_{\theta},
+		\quad \theta = 0 \text{ или } \infty.
+	\]
+	
+	В таком случае отношение правдоподобия, согласно формуле 
+	\eqref{eq:likelihood-ratio}, равно
+	\[
+		L_{n} = \prod_{k = 1}^{N} \left(\frac{p_{0}}{p_{\infty}}\right)^{x_{k}} 
+		\left(\frac{q_{0}}{q_{\infty}}\right)^{1 - x_{k}}.
+	\]
+	
+	Возьмём от этого логарифм:
+	\begin{align*}
+		Z_{n} &= (x_{1} + \ldots + x_{N})\log\frac{p_{0}}{p_{\infty}} + (N - 
+		x_{1} + \ldots + x_{N})\log\frac{q_{0}}{q_{\infty}} = \\
+		&= (x_{1} + \ldots + x_{N})\log\frac{p_{0}q_{\infty}}{p_{\infty}q_{0}} 
+		+ N\log\frac{q_{0}}{q_{\infty}}.
+	\end{align*}
+	
+	Если ввести обозначение \(X_{N} = x_{1} + \ldots + x_{N}\), то оптимальный 
+	критерий \eqref{eq:neyman-pearson-criterion} будет выглядеть так:
+	\begin{equation}
+		\phi^{*}(x_{1}, \ldots, x_{N}) = 
+		\begin{cases}
+			1, & X_{N} > h_{a}^{*}, \\
+			\lambda_{a}^{*}, & X_{N} = h_{a}^{*}, \\
+			0, & X_{N} < h_{a}^{*}, \\
+		\end{cases}
+	\end{equation}
+	где константы \(\lambda_{a}^{*}\) и \(h_{a}^{*}\) находятся из 
+	предположения о том, что вероятность ошибки первого рода для этого критерия 
+	равна \(a\): \(\E_{\infty}[\phi^{*}] = a\).
+\end{example}
+
+Вообще говоря, необходимость обращаться к рандомизированным тестам обычно 
+связана с дискретностью распределения. В случае, когда распределения имеют 
+плотности \(f_{\theta}(x)\), можно строить и детерменированный тест (так как 
+вероятность равенства нулевая). Рассмотрим это на следующем примере.
+\begin{example}[Нормальные случайные величины]
+	Пусть гипотезы \(H_{0}\) и \(H_{\infty}\) утверждают, что \(\xi_{1}, 
+	\ldots, \xi_{n}\)~--- выборка из нормального распределения 
+	с параметрами \((\mu_{0}, \sigma^{2})\) и \((\mu_{\infty}, \sigma^{2})\) 
+	соответственно. Как известно, плотность нормального распределения 
+	\(\mathcal{N}(\mu_{\theta}, \sigma^{2})\) равна
+	\[
+		f_{\theta}(x) = \frac{1}{\sqrt{2\pi\sigma^{2}}}\exp\left\{-\frac{(x - 
+		\mu_{\theta})^{2}}{2\sigma^{2}}\right\}.
+	\]
+	
+	Посчитаем логарифм отношения правдоподобия:
+	\begin{align*}
+		Z_{n} &= \sum_{k = 1}^{n} \left[\frac{(x_{k} - \mu_{\infty})^{2}} 
+		{2\sigma^{2}} - \frac{(x_{k} - \mu_{0})^{2}}{2\sigma^{2}}\right] = 
+		\sum_{k = 1}^{n} \frac{(\mu_{0} - \mu_{\infty})(2x_{k} - \mu_{0} - 
+		\mu_{\infty})}{2\sigma^{2}} = \\
+		&= \frac{\mu_{0} - \mu_{\infty}}{\sigma^{2}}\left(X_{N} - \frac{\mu_{0} 
+		- \mu_{\infty}}{2}n\right).
+	\end{align*}
+	
+	Для простоты описания скажем, что \(\mu_{0} = \mu\), \(\mu_{\infty} = 0\). 
+	Тогда
+	\[
+		Z_{n} = \frac{\mu}{\sigma^{2}}\left(X_{n} - \frac{\mu}{2}n\right).
+	\]
+	
+	Следовательно, оптимальный критерий \eqref{eq:neyman-pearson-criterion} 
+	выглядит так:
+	\[
+		\phi^{*}(x_{1}, \ldots, x_{n}) = 
+		\begin{cases}
+			1, & Z_{n} \geq h, \\
+			0, & Z_{n} < h. \\
+		\end{cases}
+	\]
+	
+	Немного преобразуем условие, введя обозначение \(H = \sigma^{2}h/\mu\):
+	\begin{equation}
+		\phi^{*}(x_{1}, \ldots, x_{n}) = 
+		\begin{cases}
+		1, & X_{n} - \mu n/2 \geq H, \\
+		0, & X_{n} - \mu n/2 < H. \\
+		\end{cases}
+	\end{equation}
+	
+	Чему равны ошибки первого и второго рода для этого критерия? Для их 
+	подсчёта вспомним, что \(\xi_{1}, \ldots, \xi_{n}\)~--- независимые и 
+	одинаково распределённые случайные величины. Если верна гипотеза 
+	\(H_{\infty}\), то \(\E_{\infty}[\xi_{1} + \ldots + \xi_{n}] = 0\) и 
+	\(\D_{\infty}[\xi_{1} + \ldots + \xi_{n}] = \sigma^{2}n\). Следовательно,
+	\begin{align*}
+		\alpha &= \E_{\infty}[\phi^{*}(\bm{\xi})] = \Pr_{\infty}\left(\sum_{k = 
+			1}^{n} \xi_{k} - \frac{\mu n}{2} \geq H\right) = 
+		\Pr_{\infty}\left(\frac{\xi_{1} + \ldots + \xi_{n}}{\sigma\sqrt{n}} 
+		\geq \frac{H + \mu n/2}{\sigma\sqrt{n}}\right) = \\
+		&= 1 - \Phi\left(\frac{H + \mu n/2}{\sigma\sqrt{n}}\right),
+	\end{align*}
+	где \(\Phi\)~--- функция распределения стандартной нормальной случайной 
+	величины. Аналогично считается и \(\beta\), только в данном случае 
+	\(\E_{0}[\xi_{1} + \ldots + \xi_{n}] = \mu n\) и 
+	\(\D_{0}[\xi_{1} + \ldots + \xi_{n}] = \sigma^{2}n\):
+	\begin{align*}
+		\beta &= \E_{0}[1 - \phi^{*}(\bm{\xi})] = \Pr_{0}\left(\sum_{k = 
+		1}^{n} \xi_{k} - \frac{\mu n}{2} < H\right) = \\
+		&= \Pr_{0}\left(\frac{\xi_{1} + \ldots + \xi_{n} - \mu n} 
+		{\sigma\sqrt{n}} < \frac{H - \mu n/2}{\sigma\sqrt{n}}\right) = 
+		\Phi\left(\frac{H - \mu n/2}{\sigma\sqrt{n}}\right).
+	\end{align*}
+	
+	В итоге мы получаем, что
+	\begin{equation}\label{eq:normal-distribution-criterion-error}
+		\alpha = 1 - \Phi\left(\frac{H + \mu n/2}{\sigma\sqrt{n}}\right),
+		\quad
+		\beta = \Phi\left(\frac{H - \mu n/2}{\sigma\sqrt{n}}\right).
+	\end{equation}
+	
+	Далее, пусть \(C_{\gamma}\)~--- это квантиль порядка \(\gamma\) для 
+	стандартного нормального распределения, то есть корень уравнения 
+	\(\Phi(C_{\gamma}) = \gamma\). Тогда, комбинируя это с 
+	\eqref{eq:normal-distribution-criterion-error}, получаем, что
+	\begin{equation}
+		\frac{H + \mu n/2}{\sigma\sqrt{n}} = C_{1 - \alpha}, 
+		\quad
+		\frac{H - \mu n/2}{\sigma\sqrt{n}} = C_{\beta}.
+	\end{equation}
+	
+	Теперь несложно получить связь между \((\alpha, \beta)\) и \((n, h)\):
+	\begin{equation}\label{eq:neyman-pearson-normal-n}
+		(C_{1 - \alpha} - C_{\beta})^{2} = \left(\frac{\mu}{\sigma}\right)^{2}n 
+		\implies n = \frac{(C_{1 - \alpha} - C_{\beta})^{2}}{(\mu/\sigma)^{2}}.
+	\end{equation}
+	\begin{equation}\label{eq:neyman-pearson-normal-H}
+		\frac{2H}{\sigma} = \sqrt{n}(C_{1 - \alpha} + C_{\beta}) \implies H = 
+		\frac{C_{1 - \alpha}^{2} - C_{\beta}^{2}}{2\mu/\sigma^{2}} \implies 
+		h = \frac{C_{1 - \alpha}^{2} - C_{\beta}^{2}}{2}.
+	\end{equation}
+	
+	Следовательно, если мы хотим, чтобы у теста \(\phi^{*}\) были вероятности 
+	ошибок первого и второго рода, равные \(\alpha\) и \(\beta\) 
+	соответственно, то число наблюдений \(n\) и порог \(h\) будут задаваться 
+	формулами \eqref{eq:neyman-pearson-normal-n} и 
+	\eqref{eq:neyman-pearson-normal-H} соответственно.
+\end{example}
+
+\subsection{Последовательные тесты}\label{sec-3}
+
+Постановка рассмотренной выше задачи различения двух статистических гипотез ($H_{0}$ и 
+$H_{\infty}$) предполагала, что решение принимается по заданному числу наблюдений~$N$. При 
+этом в~классе $\Phi_{a}=\left\{\varphi\colon \E_{\infty}[\phi] \leq a\right\}$ оптимальный тест 
+$\varphi^*$ определялся формулой~\eqref{eq:neyman-pearson-criterion}.
+
+Давайте немного изменим постановку задачи. Пусть
+\begin{equation}
+	\Phi_{\alpha,\beta} = \bigl\{\phi \colon \E_{\infty}[\phi] \leq \alpha,\,\E_{0}[1 - \phi] \leq 
+	\beta\bigr\}.
+\end{equation}
+То есть \(\Phi_{\alpha, \beta}\) "--- это класс тех тестов $\phi$, для которых вероятности ошибок 
+первого и второго рода не превосходят $\alpha$ и $\beta$ соответственно. Ранее мы показали, что для 
+гипотез относительно среднего значения в~наблюдениях, подчиняющихся гауссовскому распределению, 
+число \(N\) необходимых наблюдений и соответствующий порог \(h\) задавались формулами  
+\eqref{eq:neyman-pearson-normal-n} и \eqref{eq:neyman-pearson-normal-H} соответственно. Стоит 
+заметить, что в данном случае число наблюдений является \emph{неслучайной} величиной.
+
+Рассмотрим теперь еще одну, новую, постановку задачи, принадлежащую А.~Вальду, а именно задачу
+\emph{последовательного} различения гипотез. В~сущности, именно эта задача дала импульс развитию 
+теории последовательного анализа и теории оптимальных правил остановки.
+
+Но начнём с определений.
+\begin{definition}
+	Пусть \(x \in \R^{\infty}\), то есть \(x = (x_{1}, \ldots, x_{n}, \ldots)\) "--- числовая 
+	последовательность с \(x_{i} \in \R\). \emph{Борелевской \(\sigma\)-алгеброй в \(\R^{\infty}\)} 
+	будем называть минимальную \(\sigma\)-алгебру \(\B(\R^{\infty})\), порождённую множествами вида
+	\begin{equation}
+		\{x \colon x_{1} \in I_{1}, \ldots, x_{n} \in I_{n}\}, \quad n \geq 1,
+	\end{equation}
+	где \(I_{1}, \ldots, I_{n}\)~--- это (борелевские) множества из \(\B(\R)\). 
+\end{definition}
+
+Будем считать, что на \((\R^{\infty}, \B(\R^{\infty}))\) заданы две вероятностные меры \(\Pr_{0}\) 
+и \(\Pr_{\infty}\). Пусть координатно заданные случайные величины \(\xi_{k} = \xi_{k}(x)\), где
+\(\xi_k(x) = x_k\), являются независимыми и одинаково распределенными по каждой из мер \(\Pr_0\) и 
+\(\Pr_{\infty}\). Дополнительно скажем, что у них есть плотность \(f_{\theta}(x)\).
+
+Предположим, что шаг за шагом мы получаем данные \(x_{1}, x_{2}, \ldots, x_{n}, \ldots\), 
+являющиеся наблюдениями над случайными величинами \(\xi_{1}, \xi_{2}, \ldots, \xi_{n}, \ldots\). Мы 
+хотим  различить две гипотезы $H_0$ и $H_{\infty}$ о том, какое <<действует>> распределение, 
+$\Pr_0$ или $\Pr_{\infty}$, используя \emph{последовательные тесты}, определение которого мы сейчас 
+дадим. Но для него нужно знать, что такое марковский момент.
+
+\begin{definition}
+	Пусть \((\Omega, \F, \Pr)\) "--- вероятностное пространство с заданной на ней фильтрацией 
+	\(\mathbb{F} = (\F_{t})_{t \in T}\), где \(T \subseteq [\,0, +\infty)\). Случайную величину 
+	\(\tau\), принимающую значения в \(T \cup \{+\infty\}\), будем называть \emph{марковским 
+	моментом} относительно фильтрации \(\mathbb{F}\), если для любого \(t \in T\) событие \(\{\tau 
+	\leq t\}\) содержится в 
+	\(\F_{t}\). 
+\end{definition}
+\begin{definition}
+	\emph{Последовательным тестом} \(\delta\) будем называть пару \((\tau, \phi)\), где
+	\begin{itemize}
+		\item \(\tau = \tau(x)\) "--- марковский момент (или момент остановки) относительно потока 
+		\(\{\F_{n}, n \geq 1\}\), где \(\F_{n} = \sigma(\xi_{1},\ldots, \xi_{n})\), \(\F_{0} = 
+		\{\emptyset, \Omega\}\).
+		
+		\item \(\phi = \phi(x)\) "--- \(\F_{\tau}\)-измеримая функция со значениями в~\([\,0,1]\), 
+		где \(\F_{\tau} = \sigma(\xi_{1}, \ldots, \xi_{\tau})\).
+	\end{itemize}
+\end{definition}
+Момент \(\tau\) интерпретируется как момент прекращения наблюдений с~последующим принятием решения 
+\(\phi = \phi(x)\), интерпретируемого как вероятность принятия гипотезы \(H_{0}\), когда 
+наблюдениями являются \(x_1, \ldots, x_{\tau}\).
+
+Наиболее важными характеристиками тестов \(\delta = (\tau, \phi)\)
+являются средние длительности наблюдений \(\E_{0}[\tau]\) и \(\E_{\infty}[\tau]\) и вероятности 
+ошибок первого и второго рода \(\alpha(\phi) = \E_{\infty}[\phi]\) и \(\beta(\phi) = \E_{0}[1 - 
+\phi]\).
+
+Пусть \(\alpha\) и \(\beta\)~--- это какие-то два числа из \([\,0, 1]\). Пусть
+\[
+	\Delta(\alpha, \beta) = \{\delta = (\tau, \phi) \mid \E_{\infty}[\tau] < \infty, \E_{0}[\tau] 
+	< \infty, \alpha(\phi) \leq \alpha, \beta(\phi) \leq \beta\}.
+\]
+
+Другими словами, \(\Delta(\alpha, \beta)\)~--- это класс последовательных тестов, для которых 
+матожидание момента остановки конечно, а вероятности ошибок первого и второго рода ограничены 
+сверху \(\alpha\) и \(\beta\) соответственно.
+
+\begin{definition}
+	Будем говорить, что тест \(\delta^{*} = (\tau^{*}, \phi^{*})\) \emph{оптимален} в классе 
+	\(\Delta(\alpha, \beta)\), если для любого другого теста \(\delta \in \Delta(\alpha, \beta)\)
+	\[
+		\E_{\infty}[\tau^{*}] \leq \E_{\infty}[\tau] \text{ и } \E_{0}[\tau^{*}] \leq \E_{0}[\tau].
+	\]
+\end{definition}
+
+А. Вальд установил, что при определённых условиях такой оптимальный тест 
+\(\delta^{*}=(\tau^{*},\varphi^{*})\) действительно существует. Этот результат совершенно 
+неочевиден, так как тест \(\delta^{*}\)  минимизирует два математических ожидания 
+\emph{одновременно}.
+
+Доказательство этого факта весьма трудоёмко, так что ограничимся доказательством того, что 
+существует \emph{почти оптимальный} тест (смысл этого выражения будет объяснён позднее). Более 
+того, мы упростим задачу, ограничившись только детерминированными решающими функциями \(\phi(x) = 
+d(x)\), которые принимают только значения \(0\) и \(1\). Дальнейший анализ покажет, что такое 
+ограничение легально.
+
+Следующая лемма важна для доказательства почти оптимальности вальдовского теста "--- она дает 
+оценку снизу для \(\E_{\infty}[\tau]\) и \(\E_{0}[\tau]\).
+\begin{lemma}
+	Пусть \(\delta=(\tau,\varphi)\)~--- последовательный тест с вероятностями ошибок первого и 
+	второго рода, равными \(\alpha\) и \(\beta\) соответственно, причём \(0 < \alpha + \beta < 1\). 
+	Тогда
+	\[
+		\E_{\infty}[\tau] \geq \frac{\omega(\alpha, \beta)}{\rho_{\infty}} \text{ и } 
+		\E_{0}[\tau] \geq \frac{\omega(\beta, \alpha)}{\rho_{0}},
+	\]
+	где
+	\begin{gather*}
+		\omega(x, y) = x\log\frac{x}{1 - y} + (1 - x)\log\frac{1 - x}{y} \\
+		\rho_{\infty} = \E_{\infty}\left[\log\frac{f_{\infty}(\xi_{1})}{f_0(\xi_{1})}\right], 
+		\quad 
+Но для начала докажем одно простое утверждение.
+\rho_{0} = \E_{0}\left[\log\frac{f_{0}(\xi_{1})}{f_{\infty}(\xi_{1})}\right].
+\end{gather*}
+Предполагается, что \(\rho_{0}\) и \(\rho_{\infty}\) конечны.
+\end{lemma}
+
+\begin{theorem}[Тождество Вальда]
+	Пусть \(\xi_{1}, \ldots, \xi_{n}, \ldots\)~--- последовательность независимых и одинаково 
+	распределённых величин, а \(\tau\)~--- это случайная величина, не зависящая от \(\xi_{k}\) и 
+	принимающая натуральные значения. Тогда
+	\[
+		\E\Bigl[\sum_{k = 1}^{\tau} \xi_{k}\Bigr] = \E[\tau]\E[\xi_{1}].
+	\]
+\end{theorem}
+\begin{proof}
+	Воспользуемся тем, что \(\tau\) принимает значения в \(\N\) и тем, что она не зависит от 
+	\(\xi_{k}\):
+	\begin{align*}
+		\E\Bigl[\sum_{k = 1}^{\tau} \xi_{k}\Bigr] 
+		&= \sum_{n = 1}^{\infty}\E\Bigl[\I_{\tau = n}\sum_{k = 1}^{\tau} \xi_{k}\Bigr]
+		= \sum_{n = 1}^{\infty}\E\Bigl[\I_{\tau = n}\sum_{k = 1}^{n} \xi_{k}\Bigr] = \\
+		&= \sum_{n = 1}^{\infty}\Pr(\tau = n)\E\Bigl[\sum_{k = 1}^{\tau} \xi_{k}\Bigr]
+		= \E[\xi_{1}]\sum_{n = 1}^{\infty} n\Pr(\tau = n) = \E[\xi_{1}]\E[\tau].
+	\end{align*}
+	Тем самым мы получили желаемое.
+\end{proof}
+
+Теперь приступим к доказательству самой леммы.
+\begin{proof}
+	Пусть \(L_{n}\) "--- это отношение правдоподобия для выборки размера \(n\): \(L_{0} = 1\) и 
+	\[
+		L_{n} = \frac{f_{0}(x_{1}) f_{0}(x_{2})\ldots f_{0}(x_{n})} 
+		{f_{\infty}(x_{1}) f_{\infty}(x_{2}) \ldots f_{\infty}(x_{n})}, \quad n \geq 1.
+	\]
+	
+	Далее, введём следующие обозначения:
+	\[
+		\zeta_{k} = \log \frac{f_{0}(x_{k})}{f_{\infty}(x_{k})}, 
+		\quad
+		Z_{n} = \log L_{n} = \sum_{k = 1}^{n} \zeta_{k}.
+	\]
+	
+	Доказывать будем только неравенство для \(\E_{0}[\tau]\) "--- неравенство для 
+	\(\E_{\infty}[\tau]\) доказывается аналогично.
+	
+	Рассмотрим \(\E_{0}[Z_{\tau}]\). По тождеству Вальда
+	\begin{equation}\label{z-tau-expectation}
+		\E_{0}[Z_{\tau}] = \E_{0}\Bigl[\sum_{k = 1}^{\tau}\zeta_{k}\Bigr] = 
+		\E_{0}[\zeta_{1}]\E_{0}[\tau] = \rho_{0}\E_{0}[\tau] \implies \E_{0}[\tau] = 
+		\frac{\E_{0}[Z_{\tau}]}{\rho_{0}}.
+	\end{equation}
+	
+	Мы хотим доказать, что
+	\begin{equation}\label{eq:wald-expectation-key-ineqality}
+		\E_{0}[Z_{\tau}] \geq \omega(\beta, \alpha), \text{ где } \omega(x, y) = x\log\frac{x}{1 - 
+		y} + (1 - x)\log\frac{1 - x}{y}.
+	\end{equation}
+	
+	Представим \(\E_{0}[Z_{\tau}]\) в~следующем виде:
+	\[
+		\E_{0}[Z_{\tau}] 
+		= \int\limits_{\{x\colon d(x) = 0\}} Z_{\tau} \diff \Pr_0
+		+ \int\limits_{\{x\colon d(x) = 1\}} Z_{\tau} \diff \Pr_0.
+	\]
+	
+	Далее, вспомним неравенство Йенсена: если \(\phi(\cdot)\) "--- выпуклая (вниз) борелевская 
+	функция, то
+	\begin{equation}\label{eq:jensen-inequality}
+		\phi(\E[\xi]) \leq \E[\phi(\xi)].
+	\end{equation}
+	
+	Пользуясь им, получаем, что
+	\begin{align}
+	\int\limits_{\{x \colon d(x) = 0\}} Z_{\tau} \diff \Pr_0 
+	&= \Pr_{0}(d(x) = 0) \int\limits_{\R^{\infty}} Z_{\tau}\,\Pr_0(\diff x\,|\,d(x) = 0) \nonumber 
+	\\
+	&= \beta \int\limits_{\R^\infty} \log L_{\tau}\,\Pr_0(\diff x\,|\,d(x) = 0) \nonumber \\
+	&= -\beta \int\limits_{\R^{\infty}} \log\frac{1}{L_{\tau}}\,\Pr_0(\diff x\,|\,d(x) = 0) 
+	\nonumber \\
+	&\geq -\beta \log\int\limits_{\R^\infty}\frac1{L_\tau}\,\Pr_0(\diff x\,|\,d(x)=0) \nonumber \\
+	&=-\beta \log\biggl[\frac{\int_{\{x\colon 
+			d(x)=0\}}\frac{1}{L_{\tau}}\,\Pr_0(dx)}{\Pr_0(d(x)=0)}\biggr].
+	\end{align}
+\end{proof}
+\begin{proof}
+	Пусть $L_0=1$ и
+	\begin{gather*}
+	L_n
+	=\frac
+	{f_{0}(x_1)\cdots f_{0}(x_n)}
+	{f_{\infty}(x_1)\cdots f_{\infty}(x_n)},
+	\qquad
+	n\ge1,\\
+	Z_n=\log L_n,
+	\quad
+	\zeta_n=\log\frac{f_0(x_n)}{f_{\infty}(x_n)}.
+	\end{gather*}
+	Будем доказывать неравенство~\eqref{38}. Неравенство~\eqref{37}
+	доказывается аналогично.
+	
+	Рассмотрим
+	\begin{equation}
+	\label{42}%
+	\E_0Z_{\tau}=\E_0\sum_{k=1}^{\tau}\zeta_k.
+	\end{equation}
+	Согласно \textit{тождеству Вальда}, если
+	\[
+	\E_0|\zeta_k|<\infty
+	\quad\text{и}\quad
+	\E_0\tau<\infty,
+	\]
+	то
+	\begin{equation}
+	\label{43}%
+	\E_0Z_{\tau}=\rho_0\,\E_0\tau.
+	\end{equation}
+	(Доказательство тождества Вальда мы проведем на лекциях,
+	посвященных теории мартингалов.) Используя неравенство Иенсена
+	\[
+	\log\E_0\zeta_1\ge\E_0\log\zeta_1\;(=\rho_0)
+	\]
+	и естественное предположение, что меры $\Pr_0$ и $\Pr_{\infty}$ не
+	совпадают, можно вывести, что $\rho_0>0$.
+	
+	Если $\rho_0=\infty$, то~\eqref{38} очевидно. Так что с~самого
+	начала можно считать, что $\rho_0<\infty$, и тогда из~\eqref{43}
+	заключаем, что
+	\begin{equation}
+	\label{44}%
+	\E_0\tau=\frac{\E_0Z_{\tau}}{\rho_0}.
+	\end{equation}
+	
+	Тем самым для доказательства неравенства~\eqref{38} надо показать,
+	что
+	\begin{equation}
+	\label{45}%
+	\E_0Z_{\tau}\ge\omega(\beta,\alpha).
+	\end{equation}
+	Представим $\E_0Z_{\tau}$ в~следующем виде:
+	\[
+	\E_0Z_{\tau}
+	=\int_{\{x\colon d(x)=0\}}Z_{\tau}\,d\Pr_0
+	+\int_{\{x\colon d(x)=1\}}Z_{\tau}\,d\Pr_0.
+	\]
+	Снова используя неравенство Иенсена
+	($\log\E_0\xi\ge\E_0\log\xi$), находим, что
+	\begin{align}
+	\label{46}%
+	\int_{\{x\colon d(x)=0\}}Z_{\tau}\,d\Pr_0 &
+	=\Pr_0(d(x)=0) \int_{\R^{\infty}}Z_{\tau}\,\Pr_0(dx\mid d(x)=0)\notag\\
+	&= \beta\int_{\R^\infty}\log L_\tau\,\Pr_0(dx\mid d(x)=0)\notag\\
+	&= -\beta\int_{\R^{\infty}}\log\frac{1}{L_{\tau}}\,\Pr_0(dx\mid 
+	d(x)=0)\notag\\
+	& \ge-\beta\log\int_{\R^\infty}\frac1{L_\tau}\,\Pr_0(dx\mid d(x)=0)\notag\\
+	&=-\beta\log\biggl[\frac{\int_{\{x\colon 
+	d(x)=0\}}\frac{1}{L_{\tau}}\,\Pr_0(dx)}{\Pr_0(d(x)=0)}\biggr].
+	\end{align}
+	Покажем, что
+	\begin{equation}
+	\label{47}%
+	\int_{\{x\colon d(x)=0\}}
+	\frac{1}{L_{\tau}}
+	\,\Pr_0(dx)\le\Pr_{\infty}(d(x)=0)
+	=1-\alpha.
+	\end{equation}
+	Имеем
+	\[
+	\int_{\{x\colon d(x)=0\}}\frac{1}{L_{\tau}}\,\Pr_0(dx)
+	=\sum_{n=1}^{\infty}\int_{A_n}\frac{1}{L_{\tau}}\,\Pr_0(dx),
+	\]
+	где $A_n=\{x\colon d(x)=0\}\cap\{\tau(x)=n\}$.
+	
+	Здесь, как нетрудно видеть,
+	\begin{align}
+	\int_{A_n}\frac{1}{L_{\tau}}\,\Pr_0(dx)
+	&
+	=\int_{A_n}\frac{1}{L_n}\,\Pr_0(dx)
+	=\int_{A_n}
+	\frac
+	{f_{\infty}(x_1)\cdots f_{\infty}(x_n)}
+	{f_{0}(x_1)\cdots f_{0}(x_n)}
+	\,\Pr_0(dx)\notag\\
+	&
+	=\int_{A_n}\,\Pr_{\infty}(dx)
+	=\Pr_{\infty}(A_n)
+	=\Pr_{\infty}(\{d=0\}\cap\{\tau=n\}).\notag
+	\end{align}
+	Следовательно,
+	\[
+	\int_{\{x\colon d(x)=0\}}\frac{1}{L_{\tau}}\,\Pr_0(dx)
+	=\Pr_{\infty}(d=0)
+	=\E_{\infty}(1-\alpha)
+	=1-\alpha.
+	\]
+	Тем самым~\eqref{47} установлено, и в~силу~\eqref{46}
+	\begin{equation}
+	\label{48}%
+	\int_{\{x\colon d(x)=0\}}Z_{\tau}\,d\Pr_0
+	\ge-\beta\log\frac{1-\alpha}{\beta}
+	=\beta\log\frac{\beta}{1-\alpha}.
+	\end{equation}
+	Аналогично устанавливается, что
+	\begin{equation}
+	\label{49}%
+	\int_{\{x\colon d(x)=1\}}Z_{\tau}\,d\Pr_0
+	\ge(1-\beta)\log\frac{1-\beta}{\alpha}.
+	\end{equation}
+	Из~\eqref{48} и~\eqref{49} получаем, что
+	\begin{equation}
+	\label{50}%
+	\E_0Z_{\tau}
+	\ge\beta\log\frac{\beta}{1-\alpha}+(1-\beta)\log\frac{1-\beta}{\alpha}
+	=\omega(\beta,\alpha).
+	\end{equation}
+	
+	Аналогично~\eqref{45},
+	\begin{equation}
+	\label{51}%
+	\E_{\infty}Z_{\tau}\ge\omega(\alpha,\beta).
+	\end{equation}
+	
+	Из~\eqref{44} и~\eqref{50} получаем требуемое
+	неравенство~\eqref{38}. Из~\eqref{50} и равенства
+	$\E_{\infty}\tau=\rho_{\infty}^{-1}\E_{\infty}Z_{\tau}$ получаем
+	неравенство~\eqref{37}. Лемма доказана.
+\end{proof}
+
+\textbf{3.} Ценность неравенств~\eqref{37} и~\eqref{38} ясна: если
+суметь (для заданных $\alpha$ и~$\beta$) построить тест
+$\delta^*=(\tau^*,d^*)$, для которого $\E_{\infty}\tau^*$ и
+$\E_0\tau^*$ задаются правыми частями в~\eqref{37} и~\eqref{38},
+то этот тест будет оптимальным. Мы увидим далее, что в~случае
+\textit{непрерывного} времени (в~задаче различения гипотез
+относительно среднего значения броуновского движения) такой тест
+действительно можно построить. Но ясно также, что если суметь
+построить тест $\tilde{\delta}=(\widetilde{\tau},\tilde{d})$,
+у~которого значения $\E_{\infty}\widetilde{\tau}$ и
+$\E_0\widetilde{\tau}$ близки к~правым частям в~\eqref{37} и
+\eqref{38}, то это будет говорить о~том, что такой тест ``почти
+оптимален''. Займемся конструкцией таких тестов.
+
+Выберем две константы $A<0$ и $B>0$ и положим
+\[
+\tau_{A,B}=\inf\{n\ge1\colon Z_n=B\mbox{ или } Z_n=A\},
+\]
+т.\,е.
+\[
+\tau_{A,B}=\inf\{n\ge1\colon Z_n\not\in(A,B)\},
+\]
+где
+\[
+Z_n
+=\log L_n
+=\sum_{k=1}^n\zeta_k,
+\quad
+\zeta_k
+=\log\frac{f_0(x_k)}{f_{\infty}(x_k)}.
+\]
+Введем также решающее правило
+\[
+d_{A,B}=
+\left\{%
+\begin{array}{ll}
+1, & \hbox{если $Z_{\tau_{A,B}}\ge B$,} \\
+0, & \hbox{если $Z_{\tau_{A,B}}\le A$.} \\
+\end{array}%
+\right.
+\]
+Тест $\delta_{A,B}=(\tau_{A,B},d_{A,B})$ был предложен А.~Вальдом
+и называется \textit{последовательным критерием отношений
+	вероятностей} (см. на рис.~\ref{fig2} схематическое изображение
+траектории процесса $Z_n,n\ge1$ и момента остановки~$\tau_{A,B}$).
+
+При заданных $A$ и $B$ найдем соответствующие ошибки первого и
+второго рода
+\begin{align*}
+\alpha
+&
+=\E_{\infty}d_{A,B}
+=\Pr_{\infty}(Z_{\tau_{A,B}}\ge B)
+\intertext{и}%
+\beta
+&
+=\E_{0}(1-d_{A,B})
+=\Pr_{0}(Z_{\tau_{A,B}}\le A),
+\end{align*}
+а также найдем $\E_{\infty}\tau_{A,B}$ и $\E_0\tau_{A,B}$.
+
+Для отыскания $\E_{\theta}\tau_{A,B}$ ($\theta=0,\infty$) опять
+воспользуемся уже упомянутым (первым) тождеством Вальда, утверждающим, что если
+\begin{equation}
+\label{52}%
+\E_{\theta}|\zeta_1|<\infty
+\quad\text{и}\quad
+\E_{\theta}\tau<\infty,
+\end{equation}
+то для независимых и одинаково распределенных случайных величин
+$\zeta_1,\zeta_2,\ldots$ справедливо равенство (ср. с~\eqref{43})
+\begin{equation}
+\label{53}%
+\E_{\theta}\left(\zeta_1+\ldots+\zeta_{\tau}\right)
+=\E_{\theta}\zeta_1\cdot\E_{\theta}\tau.
+\end{equation}
+
+Применительно к~$\zeta_k=\log(f_0(x_k)/f_{\infty}(x_k))$ и
+$\tau=\tau_{A,B}$ из~\eqref{53} находим, пренебрегая эффектом
+перескока через границу, что
+\begin{align}
+\label{54}%
+\E_0\tau_{A,B}
+&
+=\frac{\E_0Z_{\tau_{A,B}}}{\E_0\log\frac{f_0(\xi_1)}{f_{\infty}(\xi_1)}}
+\simeq
+\frac
+{\Pr_0(d_{A,B}=1)B+\Pr_0(d_{A,B}=0)A}{\rho_0}\notag\\
+&
+=\frac{B\E_0d_{A,B}+A\E_0(1-d_{A,B})}{\rho_0}
+=\frac{B(1-\beta)+A\beta}{\rho_0}.
+\end{align}
+Аналогично,
+\begin{align}
+\label{55}%
+\E_{\infty}\tau_{A,B}
+&
+=\frac{\E_{\infty}Z_{\tau_{A,B}}}
+{\E_{\infty}\log(f_0(\xi_1)/f_{\infty}(\xi_1))}
+=\frac{\E_{\infty}Z_{\tau_{A,B}}}{-\rho_{\infty}}\notag\\
+&
+\simeq\frac{B\E_{\infty}d_{A,B}+A\E_{\infty}(1-d_{A,B})}{-\rho_{\infty}}
+=\frac{\alpha B+A(1-\alpha)}{-\rho_{\infty}}.
+\end{align}
+
+Займемся отысканием формул связи ошибок $(\alpha,\beta)$
+с~порогами $(A,B)$.
+
+С этой целью обратимся к~так называемому \textit{фундаментальному
+	тождеству Вальда}.
+
+Пусть
+\begin{equation}
+\label{56}%
+g_{\theta}(\lambda)
+=\E_{\theta}e^{\lambda\zeta_1}=\E_{\theta}
+\left[\frac{f_0(\xi_1)}{f_{\infty}(\xi_1)}\right]^{\lambda},
+\qquad
+\lambda\in\R.
+\end{equation}
+Понятно, что для независимых и одинаково распределенных величин
+$\zeta_1,\zeta_2,\ldots$ выполнено равенство
+\[
+\E_{\theta}\exp\{\lambda(\zeta_1+\ldots+\zeta_n)\}
+=[g_{\theta}(\lambda)]^n,
+\]
+т.\,е.
+\begin{equation}
+\label{57}%
+\E_{\theta}\frac{e^{\lambda Z_n}}{[g_{\theta}(\lambda)]^n}=1,
+\end{equation}
+или
+\begin{equation}
+\label{58}
+\E_{\theta}\exp\{\lambda Z_n-n\log g_{\theta}(\lambda)\}=1.
+\end{equation}
+(Предполагается, что все выражения, приведенные здесь и ниже
+в~\eqref{59}, определены и конечны по крайней мере для ``нужных''
+нам в~дальнейшем значений~$\lambda$.)
+
+\textbf{Фундаментальное тождество Вальда.} Справедливо следующее
+утверждение: для марковского момента~$\tau$ и~$\lambda\in\R$
+\begin{equation}
+\label{59}%
+\E_{\theta}\frac{e^{\lambda
+		Z_{\tau}}}{[g_{\theta}(\lambda)]^{\tau}}=1,
+\end{equation}
+или
+\begin{equation}
+\label{60}
+\E_{\theta}
+\exp\{\lambda Z_\tau-\tau\log g_\theta(\lambda)\}=1.
+\end{equation}
+(Доказательство этого фундаментального тождества будет дано
+в~лекциях, посвященных теории мартингалов.)
+
+Предположим сейчас, что найдется такое ``нужное значение''
+$\lambda=\lambda_{\theta}$, что
+\begin{equation}
+\label{61}%
+g_{\theta}(\lambda_{\theta})=1.
+\end{equation}
+
+Очевидным образом~\eqref{61} выполняется при $\lambda_{\theta}=0$.
+Но есть и нетривиальные $\lambda_{\theta}$, для которых~\eqref{61}
+выполнено.
+
+Если $\theta=0$, то
+\[
+g_0(\lambda)=\E_0\left[\frac{f_0(\xi_1)}{f_{\infty}(\xi_1)}\right]^{\lambda},
+\]
+и при $\lambda=\lambda_0=-1$ видим, что
+\begin{equation}
+\label{62}%
+g_0(\lambda_0)=1.
+\end{equation}
+Аналогично,
+\[
+g_{\infty}(\lambda)=\E_{\infty}\left[\frac{f_0(\xi_1)}{f_{\infty}(\xi_1)}\right]^{\lambda}
+\]
+и при $\lambda=\lambda_{\infty}=1$
+\begin{equation}
+\label{63}%
+g_{\infty}(\lambda_{\infty})=1.
+\end{equation}
+
+Из~\eqref{60} и~\eqref{62} находим, что
+\begin{equation}
+\label{64}%
+\E_0\exp\{-Z_{\tau_{A,B}}\}=1,
+\end{equation}
+и из~\eqref{60},~\eqref{63} видим, что
+\begin{equation}
+\label{65}%
+\E_{\infty}\exp\{Z_{\tau_{A,B}}\}=1.
+\end{equation}
+Таким образом, из~\eqref{64}, снова пренебрегая эффектом перескока
+через границу, находим, что
+\[
+e^{-B}\Pr_0\left( d_{A,B}=1\right)+e^{-A}\Pr_0\left( d_{A,B}=0\right)\simeq1,
+\]
+или
+\[
+e^{-B}(1-\beta)+e^{-A}\beta\simeq1,
+\]
+откуда
+\begin{equation}
+\label{66}%
+\beta
+=\Pr_0\left( d_{A,B}
+=0\right)\simeq\frac{e^B-1}{e^{B-A}-1}.
+\end{equation}
+Аналогично, из~\eqref{65}
+\[
+e^B\Pr_{\infty}\left( d_{A,B}
+=1\right)+e^A\Pr_{\infty}\left( d_{A,B}=0\right)
+\simeq1,
+\]
+или
+\[
+e^B\alpha+e^A(1-\alpha)\simeq1,
+\]
+откуда
+\begin{equation}
+\label{67}%
+\alpha
+=\Pr_{\infty}\left( d_{A,B}=1\right)
+\simeq\frac{e^{-A}-1}{e^{B-A}-1}.
+\end{equation}
+Из~\eqref{66} и~\eqref{67} видим, что для (приближенного)
+получения пары ошибок $(\alpha,\beta)$ надо просто положить
+(в~предположении, что $0<\alpha+\beta<1$)
+\begin{equation}
+\label{68}%
+A=\log\frac{\beta}{1-\alpha},
+\quad
+B=\log\frac{1-\beta}{\alpha}.
+\end{equation}
+Вернемся к~формулам~\eqref{54} и~\eqref{55}. Из~\eqref{54}
+и~\eqref{68} имеем
+\begin{align*}
+\E_0\tau_{A,B}
+&
+\simeq\frac{B(1-\beta)+A\beta}{\rho_0}\\
+&
+\simeq\frac{(1-\beta)\log\frac{1-\beta}{\alpha}+\beta\log\frac{\beta}{1-\alpha}}{\rho_0}
+=\frac{\omega(\beta,\alpha)}{\rho_0}.
+\end{align*}
+Из~\eqref{55}
+\begin{align*}
+\E_{\infty}\tau_{A,B}
+&
+\simeq\frac{\alpha B+A(1-\alpha)}{-\rho_{\infty}}
+\simeq\frac{\alpha\log\frac{1-\beta}{\alpha}+(1-\alpha)\log\frac{\beta}{1-\alpha}}{-\rho_{\infty}}\\
+&
+=\frac{\alpha\log\frac{\alpha}{1-\beta}+(1-\alpha)\log\frac{1-\alpha}{\beta}}{\rho_{\infty}}
+=\frac{\omega(\alpha,\beta)}{\rho_{\infty}}.
+\end{align*}
+Итак, в~предположении пренебрежения эффектом перескока через
+границу
+\begin{equation}
+\label{69}%
+\E_0\tau_{A,B}\simeq\frac{\omega(\beta,\alpha)}{\rho_0}
+\end{equation}
+и
+\begin{equation}
+\label{70}%
+\E_{\infty}\tau_{A,B}\simeq\frac{\omega(\alpha,\beta)}{\rho_{\infty}}.
+\end{equation}
+Сравнивая эти формулы с~\eqref{38} и~\eqref{37}, видим, что
+в~классе тестов $(\tau,d)$ таких, что $\E_0\tau<\infty$,
+$\E_{\infty}\tau<\infty$ и $\Pr_0(d=0)\le\alpha$,
+$\Pr_{\infty}(d=1)\le\beta$, тест $(\tau_{A,B},d_{A,B})$ является
+``почти оптимальным'' (с~точностью до пренебрежения эффектом
+перескока процессом $(Z_n)_{n\ge1}$ порогов $A$ и~$B$, которые
+подсчитываются по $\alpha$ и~$\beta$ с~помощью формул~\eqref{68}).
+
