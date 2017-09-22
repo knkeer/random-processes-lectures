@@ -364,7 +364,7 @@ x_{n})\) равна%
 связана с дискретностью распределения. В случае, когда распределения имеют 
 плотности \(f_{\theta}(x)\), можно строить и детерменированный тест (так как 
 вероятность равенства нулевая). Рассмотрим это на следующем примере.
-\begin{example}[Нормальные случайные величины]
+\begin{example}[Нормальные случайные величины]\label{example:normal-distribution-shift}
 	Пусть гипотезы \(H_{0}\) и \(H_{\infty}\) утверждают, что \(\xi_{1}, 
 	\ldots, \xi_{n}\)~--- выборка из нормального распределения 
 	с параметрами \((\mu_{0}, \sigma^{2})\) и \((\mu_{\infty}, \sigma^{2})\) 
@@ -469,7 +469,7 @@ x_{n})\) равна%
 	\eqref{eq:neyman-pearson-normal-H} соответственно.
 \end{example}
 
-\subsection{Последовательные тесты}\label{sec-3}
+\subsection{Последовательные тесты}
 
 Постановка рассмотренной выше задачи различения двух статистических гипотез ($H_{0}$ и 
 $H_{\infty}$) предполагала, что решение принимается по заданному числу наблюдений~$N$. При 
@@ -514,7 +514,7 @@ $\varphi^*$ определялся формулой~\eqref{eq:neyman-pearson-cri
 $\Pr_0$ или $\Pr_{\infty}$, используя \emph{последовательные тесты}, определение которого мы сейчас 
 дадим. Но для него нужно знать, что такое марковский момент.
 
-\begin{definition}
+\begin{definition}\label{def:markov-stopping-moment}
 	Пусть \((\Omega, \F, \Pr)\) "--- вероятностное пространство с заданной на ней фильтрацией 
 	\(\mathbb{F} = (\F_{t})_{t \in T}\), где \(T \subseteq [\,0, +\infty)\). Случайную величину 
 	\(\tau\), принимающую значения в \(T \cup \{+\infty\}\), будем называть \emph{марковским 
@@ -573,7 +573,7 @@ d(x)\), которые принимают только значения \(0\) и
 
 Следующая лемма важна для доказательства почти оптимальности вальдовского теста "--- она дает 
 оценку снизу для \(\E_{\infty}[\tau]\) и \(\E_{0}[\tau]\).
-\begin{lemma}
+\begin{lemma}\label{lemma:tau-limitation}
 	Пусть \(\delta=(\tau,\varphi)\)~--- последовательный тест с вероятностями ошибок первого и 
 	второго рода, равными \(\alpha\) и \(\beta\) соответственно, причём \(0 < \alpha + \beta < 1\). 
 	Тогда
@@ -586,16 +586,16 @@ d(x)\), которые принимают только значения \(0\) и
 		\omega(x, y) = x\log\frac{x}{1 - y} + (1 - x)\log\frac{1 - x}{y} \\
 		\rho_{\infty} = \E_{\infty}\left[\log\frac{f_{\infty}(\xi_{1})}{f_0(\xi_{1})}\right], 
 		\quad 
-Но для начала докажем одно простое утверждение.
-\rho_{0} = \E_{0}\left[\log\frac{f_{0}(\xi_{1})}{f_{\infty}(\xi_{1})}\right].
-\end{gather*}
-Предполагается, что \(\rho_{0}\) и \(\rho_{\infty}\) конечны.
+		\rho_{0} = \E_{0}\left[\log\frac{f_{0}(\xi_{1})}{f_{\infty}(\xi_{1})}\right].
+	\end{gather*}
+	Предполагается, что \(\rho_{0}\) и \(\rho_{\infty}\) конечны.
 \end{lemma}
+
+Но для начала докажем одно простое утверждение.
 
 \begin{theorem}[Тождество Вальда]
 	Пусть \(\xi_{1}, \ldots, \xi_{n}, \ldots\)~--- последовательность независимых и одинаково 
-	распределённых величин, а \(\tau\)~--- это случайная величина, не зависящая от \(\xi_{k}\) и 
-	принимающая натуральные значения. Тогда
+	распределённых величин, а \(\tau\)~--- это случайная величина, не зависящая от \(\xi_{k}\) и принимающая натуральные значения, причём у всех случайных величин конечное матожидание. Тогда
 	\[
 		\E\Bigl[\sum_{k = 1}^{\tau} \xi_{k}\Bigr] = \E[\tau]\E[\xi_{1}].
 	\]
@@ -613,7 +613,8 @@ d(x)\), которые принимают только значения \(0\) и
 	Тем самым мы получили желаемое.
 \end{proof}
 
-Теперь приступим к доказательству самой леммы.
+Теперь приступим к доказательству самой леммы.%
+\footnote{Доказательство во всю использует интегралы по бесконечномерным пространствам. В формальности лезть не будем "--- это достаточно жёсткая математика "--- и скажем, что это рассуждение корректно и такие интегралы можно рассматривать.}
 \begin{proof}
 	Пусть \(L_{n}\) "--- это отношение правдоподобия для выборки размера \(n\): \(L_{0} = 1\) и 
 	\[
@@ -657,436 +658,163 @@ d(x)\), которые принимают только значения \(0\) и
 		\phi(\E[\xi]) \leq \E[\phi(\xi)].
 	\end{equation}
 	
-	Пользуясь им, получаем, что
+	Пользуясь им и тем, что \(\beta = \Pr_{0}(d(x) = 0)\), получаем, что
 	\begin{align}
-	\int\limits_{\{x \colon d(x) = 0\}} Z_{\tau} \diff \Pr_0 
-	&= \Pr_{0}(d(x) = 0) \int\limits_{\R^{\infty}} Z_{\tau}\,\Pr_0(\diff x\,|\,d(x) = 0) \nonumber 
-	\\
-	&= \beta \int\limits_{\R^\infty} \log L_{\tau}\,\Pr_0(\diff x\,|\,d(x) = 0) \nonumber \\
-	&= -\beta \int\limits_{\R^{\infty}} \log\frac{1}{L_{\tau}}\,\Pr_0(\diff x\,|\,d(x) = 0) 
+	\int\limits_{\{x \colon d(x) = 0\}} Z_{\tau} \diff \Pr_{0} 
+	&= \Pr_{0}(d(x) = 0) \int\limits_{\R^{\infty}} Z_{\tau}\,\Pr_0(\diff x\,|\,d(x) = 0) = \nonumber \\
+	&= \beta \int\limits_{\R^\infty} \log L_{\tau}\,\Pr_0(\diff x\,|\,d(x) = 0) = \nonumber \\
+	&= -\beta \int\limits_{\R^{\infty}} \log\frac{1}{L_{\tau}}\,\Pr_0(\diff x\,|\,d(x) = 0) = 
 	\nonumber \\
 	&\geq -\beta \log\int\limits_{\R^\infty}\frac1{L_\tau}\,\Pr_0(\diff x\,|\,d(x)=0) \nonumber \\
-	&=-\beta \log\biggl[\frac{\int_{\{x\colon 
-			d(x)=0\}}\frac{1}{L_{\tau}}\,\Pr_0(dx)}{\Pr_0(d(x)=0)}\biggr].
+	&=-\beta \log\Biggl[\frac{1}{\Pr_0(d(x)=0)} \int\limits_{\{x \colon d(x)=0\}}\frac{1}{L_{\tau}}\,\Pr_0(\diff x)\Biggr].
 	\end{align}
-\end{proof}
-\begin{proof}
-	Пусть $L_0=1$ и
-	\begin{gather*}
-	L_n
-	=\frac
-	{f_{0}(x_1)\cdots f_{0}(x_n)}
-	{f_{\infty}(x_1)\cdots f_{\infty}(x_n)},
-	\qquad
-	n\ge1,\\
-	Z_n=\log L_n,
-	\quad
-	\zeta_n=\log\frac{f_0(x_n)}{f_{\infty}(x_n)}.
-	\end{gather*}
-	Будем доказывать неравенство~\eqref{38}. Неравенство~\eqref{37}
-	доказывается аналогично.
 	
-	Рассмотрим
-	\begin{equation}
-	\label{42}%
-	\E_0Z_{\tau}=\E_0\sum_{k=1}^{\tau}\zeta_k.
-	\end{equation}
-	Согласно \textit{тождеству Вальда}, если
+	Теперь докажем, что
 	\[
-	\E_0|\zeta_k|<\infty
-	\quad\text{и}\quad
-	\E_0\tau<\infty,
+		\int\limits_{\{x\colon d(x) = 0\}} \frac{1}{L_{\tau}}\Pr_{0}(\diff x) = \Pr_{\infty}(d(x) = 0) = 1 - \alpha.
 	\]
-	то
-	\begin{equation}
-	\label{43}%
-	\E_0Z_{\tau}=\rho_0\,\E_0\tau.
-	\end{equation}
-	(Доказательство тождества Вальда мы проведем на лекциях,
-	посвященных теории мартингалов.) Используя неравенство Иенсена
-	\[
-	\log\E_0\zeta_1\ge\E_0\log\zeta_1\;(=\rho_0)
-	\]
-	и естественное предположение, что меры $\Pr_0$ и $\Pr_{\infty}$ не
-	совпадают, можно вывести, что $\rho_0>0$.
 	
-	Если $\rho_0=\infty$, то~\eqref{38} очевидно. Так что с~самого
-	начала можно считать, что $\rho_0<\infty$, и тогда из~\eqref{43}
-	заключаем, что
-	\begin{equation}
-	\label{44}%
-	\E_0\tau=\frac{\E_0Z_{\tau}}{\rho_0}.
-	\end{equation}
-	
-	Тем самым для доказательства неравенства~\eqref{38} надо показать,
-	что
-	\begin{equation}
-	\label{45}%
-	\E_0Z_{\tau}\ge\omega(\beta,\alpha).
-	\end{equation}
-	Представим $\E_0Z_{\tau}$ в~следующем виде:
-	\[
-	\E_0Z_{\tau}
-	=\int_{\{x\colon d(x)=0\}}Z_{\tau}\,d\Pr_0
-	+\int_{\{x\colon d(x)=1\}}Z_{\tau}\,d\Pr_0.
-	\]
-	Снова используя неравенство Иенсена
-	($\log\E_0\xi\ge\E_0\log\xi$), находим, что
-	\begin{align}
-	\label{46}%
-	\int_{\{x\colon d(x)=0\}}Z_{\tau}\,d\Pr_0 &
-	=\Pr_0(d(x)=0) \int_{\R^{\infty}}Z_{\tau}\,\Pr_0(dx\mid d(x)=0)\notag\\
-	&= \beta\int_{\R^\infty}\log L_\tau\,\Pr_0(dx\mid d(x)=0)\notag\\
-	&= -\beta\int_{\R^{\infty}}\log\frac{1}{L_{\tau}}\,\Pr_0(dx\mid 
-	d(x)=0)\notag\\
-	& \ge-\beta\log\int_{\R^\infty}\frac1{L_\tau}\,\Pr_0(dx\mid d(x)=0)\notag\\
-	&=-\beta\log\biggl[\frac{\int_{\{x\colon 
-	d(x)=0\}}\frac{1}{L_{\tau}}\,\Pr_0(dx)}{\Pr_0(d(x)=0)}\biggr].
-	\end{align}
-	Покажем, что
-	\begin{equation}
-	\label{47}%
-	\int_{\{x\colon d(x)=0\}}
-	\frac{1}{L_{\tau}}
-	\,\Pr_0(dx)\le\Pr_{\infty}(d(x)=0)
-	=1-\alpha.
-	\end{equation}
 	Имеем
 	\[
-	\int_{\{x\colon d(x)=0\}}\frac{1}{L_{\tau}}\,\Pr_0(dx)
-	=\sum_{n=1}^{\infty}\int_{A_n}\frac{1}{L_{\tau}}\,\Pr_0(dx),
+		\int\limits_{\{x\colon d(x) = 0\}} \frac{1}{L_{\tau}}\Pr_{0}(\diff x)
+		=\sum_{n = 1}^{\infty} \int\limits_{A_{n}} \frac{1}{L_{\tau}}\Pr_{0}(\diff x),
 	\]
-	где $A_n=\{x\colon d(x)=0\}\cap\{\tau(x)=n\}$.
-	
-	Здесь, как нетрудно видеть,
+	где $A_n=\{x\colon d(x) = 0, \tau(x) = n\}$. Теперь рассмотрим член суммы:
 	\begin{align}
-	\int_{A_n}\frac{1}{L_{\tau}}\,\Pr_0(dx)
-	&
-	=\int_{A_n}\frac{1}{L_n}\,\Pr_0(dx)
-	=\int_{A_n}
-	\frac
-	{f_{\infty}(x_1)\cdots f_{\infty}(x_n)}
-	{f_{0}(x_1)\cdots f_{0}(x_n)}
-	\,\Pr_0(dx)\notag\\
-	&
-	=\int_{A_n}\,\Pr_{\infty}(dx)
-	=\Pr_{\infty}(A_n)
-	=\Pr_{\infty}(\{d=0\}\cap\{\tau=n\}).\notag
+		\int\limits_{A_{n}} \frac{1}{L_{\tau}}\Pr_{0}(\diff x)
+		&= \int\limits_{A_{n}} \frac{1}{L_{n}}\Pr_{0}(\diff x) 
+		 = \int\limits_{A_{n}} \frac{f_{\infty}(x_{1}) f_{\infty}(x_{2}) \ldots f_{\infty}(x_{n})}{f_{0}(x_{1}) f_{0}(x_{2}) \ldots f_{0}(x_{n})}\Pr_{0}(\diff x)
+		 = \notag\\
+		&=\int\limits_{A_n} \Pr_{\infty}(\diff x)
+	     =\Pr_{\infty}(A_n)
+	     =\Pr_{\infty}(\{d=0\}\cap\{\tau=n\}).\notag
 	\end{align}
 	Следовательно,
 	\[
-	\int_{\{x\colon d(x)=0\}}\frac{1}{L_{\tau}}\,\Pr_0(dx)
-	=\Pr_{\infty}(d=0)
-	=\E_{\infty}(1-\alpha)
-	=1-\alpha.
+		\int\limits_{\{x\colon d(x) = 0\}} \frac{1}{L_{\tau}}\Pr_0(\diff x)
+		= \Pr_{\infty}(d = 0)
+		= \E_{\infty}(1 - \alpha)
+		= 1 - \alpha.
 	\]
-	Тем самым~\eqref{47} установлено, и в~силу~\eqref{46}
-	\begin{equation}
-	\label{48}%
-	\int_{\{x\colon d(x)=0\}}Z_{\tau}\,d\Pr_0
-	\ge-\beta\log\frac{1-\alpha}{\beta}
-	=\beta\log\frac{\beta}{1-\alpha}.
-	\end{equation}
-	Аналогично устанавливается, что
-	\begin{equation}
-	\label{49}%
-	\int_{\{x\colon d(x)=1\}}Z_{\tau}\,d\Pr_0
-	\ge(1-\beta)\log\frac{1-\beta}{\alpha}.
-	\end{equation}
-	Из~\eqref{48} и~\eqref{49} получаем, что
-	\begin{equation}
-	\label{50}%
-	\E_0Z_{\tau}
-	\ge\beta\log\frac{\beta}{1-\alpha}+(1-\beta)\log\frac{1-\beta}{\alpha}
-	=\omega(\beta,\alpha).
-	\end{equation}
 	
-	Аналогично~\eqref{45},
-	\begin{equation}
-	\label{51}%
-	\E_{\infty}Z_{\tau}\ge\omega(\alpha,\beta).
-	\end{equation}
+	Отсюда следует, что 
+	\[
+		\int\limits_{\{x \colon d(x) = 0\}} Z_{\tau}\diff\Pr_0
+		\geq -\beta\log\frac{1 - \alpha}{\beta}
+		= \beta\log\frac{\beta}{1 - \alpha}.
+	\]
 	
-	Из~\eqref{44} и~\eqref{50} получаем требуемое
-	неравенство~\eqref{38}. Из~\eqref{50} и равенства
-	$\E_{\infty}\tau=\rho_{\infty}^{-1}\E_{\infty}Z_{\tau}$ получаем
-	неравенство~\eqref{37}. Лемма доказана.
+	Аналогично показывается, что
+	\[
+		\int\limits_{\{x \colon d(x) = 1\}} Z_{\tau}\diff\Pr_0
+		\geq (1 - \beta)\log\frac{1 - \beta}{\alpha}.
+	\]
+	
+	Комбинируя всё вышесказанное, получаем желаемое.
 \end{proof}
 
-\textbf{3.} Ценность неравенств~\eqref{37} и~\eqref{38} ясна: если
-суметь (для заданных $\alpha$ и~$\beta$) построить тест
-$\delta^*=(\tau^*,d^*)$, для которого $\E_{\infty}\tau^*$ и
-$\E_0\tau^*$ задаются правыми частями в~\eqref{37} и~\eqref{38},
-то этот тест будет оптимальным. Мы увидим далее, что в~случае
-\textit{непрерывного} времени (в~задаче различения гипотез
-относительно среднего значения броуновского движения) такой тест
-действительно можно построить. Но ясно также, что если суметь
-построить тест $\tilde{\delta}=(\widetilde{\tau},\tilde{d})$,
-у~которого значения $\E_{\infty}\widetilde{\tau}$ и
-$\E_0\widetilde{\tau}$ близки к~правым частям в~\eqref{37} и
-\eqref{38}, то это будет говорить о~том, что такой тест ``почти
+Эти неравенства полезны тем, что если мы сможем (для заданных \(\alpha\) и \(\beta\)) построить тест \(\delta^{*} = (\tau^{*}, d^{*})\), для которого \(\E_{\infty}[\tau^{*}]\) и
+\(\E_{0}[\tau^{*}]\) равны \(\omega(\alpha, \beta)/\rho_{\infty}\) и \(\omega(\beta, \alpha)/\rho_{0}\), то этот тест будет оптимальным. Мы увидим далее, что в~случае непрерывного времени (в~задаче различения гипотез относительно среднего значения броуновского движения) такой тест действительно можно построить. Но ясно также, что если суметь
+построить тест \(\tilde{\delta} = (\widetilde{\tau}, \tilde{d})\),
+у~которого значения \(\E_{\infty}[\widetilde{\tau}]\) и \(\E_{0}[\widetilde{\tau}]\) близки к~предельным значениям, то это будет говорить о~том, что такой тест ``почти
 оптимален''. Займемся конструкцией таких тестов.
 
-Выберем две константы $A<0$ и $B>0$ и положим
+Пусть \(A < 0\) и \(B > 0\) "--- это какие-то константы. Положим
 \[
-\tau_{A,B}=\inf\{n\ge1\colon Z_n=B\mbox{ или } Z_n=A\},
+	\tau_{AB} = \inf\{n \in \N \colon Z_{n} \geq B \text{ или } Z_{n} \leq A\}.
 \]
-т.\,е.
-\[
-\tau_{A,B}=\inf\{n\ge1\colon Z_n\not\in(A,B)\},
-\]
-где
-\[
-Z_n
-=\log L_n
-=\sum_{k=1}^n\zeta_k,
-\quad
-\zeta_k
-=\log\frac{f_0(x_k)}{f_{\infty}(x_k)}.
-\]
-Введем также решающее правило
-\[
-d_{A,B}=
-\left\{%
-\begin{array}{ll}
-1, & \hbox{если $Z_{\tau_{A,B}}\ge B$,} \\
-0, & \hbox{если $Z_{\tau_{A,B}}\le A$.} \\
-\end{array}%
-\right.
-\]
-Тест $\delta_{A,B}=(\tau_{A,B},d_{A,B})$ был предложен А.~Вальдом
-и называется \textit{последовательным критерием отношений
-	вероятностей} (см. на рис.~\ref{fig2} схематическое изображение
-траектории процесса $Z_n,n\ge1$ и момента остановки~$\tau_{A,B}$).
 
-При заданных $A$ и $B$ найдем соответствующие ошибки первого и
-второго рода
+Далее, введём следующее решающее правило:
+\[
+	d_{AB} =
+	\begin{cases}
+		1,& \text{ если } Z_{\tau_{AB}} \geq B \\
+		0,& \text{ если } Z_{\tau_{AB}} \leq A
+	\end{cases}
+\]
+
+Тест \(\delta_{AB} = (\tau_{AB}, d_{AB})\) был предложен А. Вальдом и называется \emph{последовательным критерием отношений вероятностей}.
+
+Теперь нужно понять, чему равны основные характеристики такого последовательного теста: вероятности ошибок первого и второго рода и матожидания момента остановки. Начнём с матожидания. Опять же, воспользуемся тождеством Вальда и пренебрежём перескоком за границы, то есть будем считать, что если \(d_{AB} = 1 (0)\) , то \(Z_{\tau_{AB}} = B (A)\):
 \begin{align*}
-\alpha
-&
-=\E_{\infty}d_{A,B}
-=\Pr_{\infty}(Z_{\tau_{A,B}}\ge B)
-\intertext{и}%
-\beta
-&
-=\E_{0}(1-d_{A,B})
-=\Pr_{0}(Z_{\tau_{A,B}}\le A),
+	\E_{0}[\tau_{AB}] &= \frac{\E_{0}[Z_{\tau_{AB}}]}{\E_{0}[\zeta_{1}]} \approx \frac{B\Pr_{0}(d_{AB} = 1) + A\Pr_{0}(d_{AB} = 0)}{\rho_{0}} = \\
+	&= \frac{B\E_{0}[d_{AB}] + A\E_{0}[1 - d_{AB}]}{\rho_{0}} = \frac{B(1 - \beta) + A\beta}{\rho_{0}}.
 \end{align*}
-а также найдем $\E_{\infty}\tau_{A,B}$ и $\E_0\tau_{A,B}$.
 
-Для отыскания $\E_{\theta}\tau_{A,B}$ ($\theta=0,\infty$) опять
-воспользуемся уже упомянутым (первым) тождеством Вальда, утверждающим, что если
-\begin{equation}
-\label{52}%
-\E_{\theta}|\zeta_1|<\infty
-\quad\text{и}\quad
-\E_{\theta}\tau<\infty,
-\end{equation}
-то для независимых и одинаково распределенных случайных величин
-$\zeta_1,\zeta_2,\ldots$ справедливо равенство (ср. с~\eqref{43})
-\begin{equation}
-\label{53}%
-\E_{\theta}\left(\zeta_1+\ldots+\zeta_{\tau}\right)
-=\E_{\theta}\zeta_1\cdot\E_{\theta}\tau.
-\end{equation}
-
-Применительно к~$\zeta_k=\log(f_0(x_k)/f_{\infty}(x_k))$ и
-$\tau=\tau_{A,B}$ из~\eqref{53} находим, пренебрегая эффектом
-перескока через границу, что
-\begin{align}
-\label{54}%
-\E_0\tau_{A,B}
-&
-=\frac{\E_0Z_{\tau_{A,B}}}{\E_0\log\frac{f_0(\xi_1)}{f_{\infty}(\xi_1)}}
-\simeq
-\frac
-{\Pr_0(d_{A,B}=1)B+\Pr_0(d_{A,B}=0)A}{\rho_0}\notag\\
-&
-=\frac{B\E_0d_{A,B}+A\E_0(1-d_{A,B})}{\rho_0}
-=\frac{B(1-\beta)+A\beta}{\rho_0}.
-\end{align}
-Аналогично,
-\begin{align}
-\label{55}%
-\E_{\infty}\tau_{A,B}
-&
-=\frac{\E_{\infty}Z_{\tau_{A,B}}}
-{\E_{\infty}\log(f_0(\xi_1)/f_{\infty}(\xi_1))}
-=\frac{\E_{\infty}Z_{\tau_{A,B}}}{-\rho_{\infty}}\notag\\
-&
-\simeq\frac{B\E_{\infty}d_{A,B}+A\E_{\infty}(1-d_{A,B})}{-\rho_{\infty}}
-=\frac{\alpha B+A(1-\alpha)}{-\rho_{\infty}}.
-\end{align}
-
-Займемся отысканием формул связи ошибок $(\alpha,\beta)$
-с~порогами $(A,B)$.
-
-С этой целью обратимся к~так называемому \textit{фундаментальному
-	тождеству Вальда}.
-
-Пусть
-\begin{equation}
-\label{56}%
-g_{\theta}(\lambda)
-=\E_{\theta}e^{\lambda\zeta_1}=\E_{\theta}
-\left[\frac{f_0(\xi_1)}{f_{\infty}(\xi_1)}\right]^{\lambda},
-\qquad
-\lambda\in\R.
-\end{equation}
-Понятно, что для независимых и одинаково распределенных величин
-$\zeta_1,\zeta_2,\ldots$ выполнено равенство
-\[
-\E_{\theta}\exp\{\lambda(\zeta_1+\ldots+\zeta_n)\}
-=[g_{\theta}(\lambda)]^n,
-\]
-т.\,е.
-\begin{equation}
-\label{57}%
-\E_{\theta}\frac{e^{\lambda Z_n}}{[g_{\theta}(\lambda)]^n}=1,
-\end{equation}
-или
-\begin{equation}
-\label{58}
-\E_{\theta}\exp\{\lambda Z_n-n\log g_{\theta}(\lambda)\}=1.
-\end{equation}
-(Предполагается, что все выражения, приведенные здесь и ниже
-в~\eqref{59}, определены и конечны по крайней мере для ``нужных''
-нам в~дальнейшем значений~$\lambda$.)
-
-\textbf{Фундаментальное тождество Вальда.} Справедливо следующее
-утверждение: для марковского момента~$\tau$ и~$\lambda\in\R$
-\begin{equation}
-\label{59}%
-\E_{\theta}\frac{e^{\lambda
-		Z_{\tau}}}{[g_{\theta}(\lambda)]^{\tau}}=1,
-\end{equation}
-или
-\begin{equation}
-\label{60}
-\E_{\theta}
-\exp\{\lambda Z_\tau-\tau\log g_\theta(\lambda)\}=1.
-\end{equation}
-(Доказательство этого фундаментального тождества будет дано
-в~лекциях, посвященных теории мартингалов.)
-
-Предположим сейчас, что найдется такое ``нужное значение''
-$\lambda=\lambda_{\theta}$, что
-\begin{equation}
-\label{61}%
-g_{\theta}(\lambda_{\theta})=1.
-\end{equation}
-
-Очевидным образом~\eqref{61} выполняется при $\lambda_{\theta}=0$.
-Но есть и нетривиальные $\lambda_{\theta}$, для которых~\eqref{61}
-выполнено.
-
-Если $\theta=0$, то
-\[
-g_0(\lambda)=\E_0\left[\frac{f_0(\xi_1)}{f_{\infty}(\xi_1)}\right]^{\lambda},
-\]
-и при $\lambda=\lambda_0=-1$ видим, что
-\begin{equation}
-\label{62}%
-g_0(\lambda_0)=1.
-\end{equation}
-Аналогично,
-\[
-g_{\infty}(\lambda)=\E_{\infty}\left[\frac{f_0(\xi_1)}{f_{\infty}(\xi_1)}\right]^{\lambda}
-\]
-и при $\lambda=\lambda_{\infty}=1$
-\begin{equation}
-\label{63}%
-g_{\infty}(\lambda_{\infty})=1.
-\end{equation}
-
-Из~\eqref{60} и~\eqref{62} находим, что
-\begin{equation}
-\label{64}%
-\E_0\exp\{-Z_{\tau_{A,B}}\}=1,
-\end{equation}
-и из~\eqref{60},~\eqref{63} видим, что
-\begin{equation}
-\label{65}%
-\E_{\infty}\exp\{Z_{\tau_{A,B}}\}=1.
-\end{equation}
-Таким образом, из~\eqref{64}, снова пренебрегая эффектом перескока
-через границу, находим, что
-\[
-e^{-B}\Pr_0\left( d_{A,B}=1\right)+e^{-A}\Pr_0\left( d_{A,B}=0\right)\simeq1,
-\]
-или
-\[
-e^{-B}(1-\beta)+e^{-A}\beta\simeq1,
-\]
-откуда
-\begin{equation}
-\label{66}%
-\beta
-=\Pr_0\left( d_{A,B}
-=0\right)\simeq\frac{e^B-1}{e^{B-A}-1}.
-\end{equation}
-Аналогично, из~\eqref{65}
-\[
-e^B\Pr_{\infty}\left( d_{A,B}
-=1\right)+e^A\Pr_{\infty}\left( d_{A,B}=0\right)
-\simeq1,
-\]
-или
-\[
-e^B\alpha+e^A(1-\alpha)\simeq1,
-\]
-откуда
-\begin{equation}
-\label{67}%
-\alpha
-=\Pr_{\infty}\left( d_{A,B}=1\right)
-\simeq\frac{e^{-A}-1}{e^{B-A}-1}.
-\end{equation}
-Из~\eqref{66} и~\eqref{67} видим, что для (приближенного)
-получения пары ошибок $(\alpha,\beta)$ надо просто положить
-(в~предположении, что $0<\alpha+\beta<1$)
-\begin{equation}
-\label{68}%
-A=\log\frac{\beta}{1-\alpha},
-\quad
-B=\log\frac{1-\beta}{\alpha}.
-\end{equation}
-Вернемся к~формулам~\eqref{54} и~\eqref{55}. Из~\eqref{54}
-и~\eqref{68} имеем
+Аналолично считается \(\E_{\infty}[\tau_{AB}]\):
 \begin{align*}
-\E_0\tau_{A,B}
-&
-\simeq\frac{B(1-\beta)+A\beta}{\rho_0}\\
-&
-\simeq\frac{(1-\beta)\log\frac{1-\beta}{\alpha}+\beta\log\frac{\beta}{1-\alpha}}{\rho_0}
-=\frac{\omega(\beta,\alpha)}{\rho_0}.
+	\E_{\infty}[\tau_{AB}] &= \frac{\E_{\infty}[Z_{\tau_{AB}}]}{\E_{\infty}[\zeta_{1}]} \approx -\frac{B\Pr_{\infty}(d_{AB} = 1) + A\Pr_{\infty}(d_{AB} = 0)}{\rho_{\infty}} = \\
+	&= -\frac{B\E_{\infty}[d_{AB}] + A\E_{\infty}[1 - d_{AB}]}{\rho_{\infty}} = -\frac{B\alpha + A(1 - \alpha)}{\rho_{\infty}}.
 \end{align*}
-Из~\eqref{55}
+
+Займемся отысканием формул связи ошибок \((\alpha, \beta)\) с~порогами \((A, B)\). С этой целью обратимся к~так называемому \emph{фундаментальному тождеству Вальда}. Пусть
+
+\[
+	g_{\theta}(\lambda) = \E_{\theta}[e^{\lambda\zeta_{1}}] = \E_{\theta}\left[\biggl(\frac{f_{0}(\xi_{1})}{f_{\infty}(\xi_{1})}\biggr)^{\!\lambda}\right], \qquad \lambda \in \R.
+\]
+
+Понятно, что для независимых и одинаково распределенных величин \(\zeta_{1}, \zeta_{2}, \ldots, \zeta_{n}\) выполнено равенство
+\[
+	\E_{\theta}[e^{\lambda(\zeta_{1} + \ldots + \zeta_{n})}] = [g_{\theta}(\lambda)]^n, \text{ или же } \E_{\theta}\left[\frac{e^{\lambda Z_n}}{(g_{\theta}(\lambda))^{n}}\right] = \E_{\theta}\bigl[\exp\{\lambda Z_n-n\log g_{\theta}(\lambda)\}\bigr] = 1.
+\]
+
+Будем предполагать, что все выражения, приведенные здесь и ниже, определены и конечны по крайней мере для ``нужных'' нам в~дальнейшем значений~\(\lambda\). 
+
+\begin{theorem}[Фундаментальное тождество Вальда]
+	Для марковского момента \(\tau\) и \(\lambda \in \R\) 
+	\[
+		\E_{\theta}\left[\frac{e^{\lambda Z_{\tau}}}{(g_{\theta}(\lambda))^{\tau}}\right] = \E_{\theta}\bigl[\exp\{\lambda Z_{\tau} - \tau \log g_{\theta}(\lambda)\}\bigr] = 1.
+	\]
+\end{theorem}
+
+Доказательство этой теоремы требует знания теории мартингалов, поэтому оставим её без доказательства.
+
+Пока что предположим, что мы нашли \(\lambda = \lambda_{0}\) такое, что \(g_{\theta}(\lambda_{\theta}) = 1\). Очевидным образом это выполняется при \(\lambda_{\theta} = 0\), но есть и нетривиальные \(\lambda_{\theta}\). Действительно, распишем функцию по определению
+\[
+	g_{\theta}(\lambda) = \E_{\theta}\left[\biggl(\frac{f_{0}(\xi_{1})}{f_{\infty}(\xi_{1})}\biggr)^{\!\lambda}\right] = \int\limits_{-\infty}^{+\infty} \left(\frac{f_{0}(x)}{f_{\infty}(x)}\right)^{\!\lambda} f_{\theta}(x)\diff x.
+\]
+
+Отсюда понятно, что \(g_{0}(-1) = \E_{\infty}[1] = 1\). Аналогично, \(g_{\infty}(1) = \E_{0}[1] = 1\). Из этого следует, что 
+\[
+	\E_{0}\bigl[\exp\{-Z_{\tau_{AB}}\}\bigr] = \E_{\infty}\bigl[\exp\{Z_{\tau_{AB}}\}\bigr] = 1.
+\]
+
+Распишем матожидания, снова пренебрегая перескоком: 
 \begin{align*}
-\E_{\infty}\tau_{A,B}
-&
-\simeq\frac{\alpha B+A(1-\alpha)}{-\rho_{\infty}}
-\simeq\frac{\alpha\log\frac{1-\beta}{\alpha}+(1-\alpha)\log\frac{\beta}{1-\alpha}}{-\rho_{\infty}}\\
-&
-=\frac{\alpha\log\frac{\alpha}{1-\beta}+(1-\alpha)\log\frac{1-\alpha}{\beta}}{\rho_{\infty}}
-=\frac{\omega(\alpha,\beta)}{\rho_{\infty}}.
+	e^{-B}\Pr_{0}(d_{AB} = 1) + e^{-A}\Pr_{0}(d_{AB} = 0) &\approx 1, \\
+	e^{B}\Pr_{\infty}(d_{AB} = 1) + e^{A}\Pr_{\infty}(d_{AB} = 0) &\approx 1.
 \end{align*}
-Итак, в~предположении пренебрежения эффектом перескока через
-границу
-\begin{equation}
-\label{69}%
-\E_0\tau_{A,B}\simeq\frac{\omega(\beta,\alpha)}{\rho_0}
-\end{equation}
-и
-\begin{equation}
-\label{70}%
-\E_{\infty}\tau_{A,B}\simeq\frac{\omega(\alpha,\beta)}{\rho_{\infty}}.
-\end{equation}
-Сравнивая эти формулы с~\eqref{38} и~\eqref{37}, видим, что
-в~классе тестов $(\tau,d)$ таких, что $\E_0\tau<\infty$,
-$\E_{\infty}\tau<\infty$ и $\Pr_0(d=0)\le\alpha$,
-$\Pr_{\infty}(d=1)\le\beta$, тест $(\tau_{A,B},d_{A,B})$ является
-``почти оптимальным'' (с~точностью до пренебрежения эффектом
-перескока процессом $(Z_n)_{n\ge1}$ порогов $A$ и~$B$, которые
-подсчитываются по $\alpha$ и~$\beta$ с~помощью формул~\eqref{68}).
+
+Заменим вероятности на вероятности ошибок первого и второго рода:
+\begin{align*}
+	e^{-B}(1 - \beta) + e^{-A}\beta &\approx 1, \\
+	e^{B}\alpha + e^{A}(1 - \alpha) &\approx 1.
+\end{align*}
+
+Отсюда получаем, что
+\[
+	\alpha \approx \frac{1 - e^{A}}{e^{B} - e^{A}} = \frac{e^{-A} - 1}{e^{B - A} - 1}, \quad \beta \approx \frac{1 - e^{-B}}{e^{-A} - e^{-B}} = \frac{e^{B} - 1}{e^{B - A} - 1}.
+\]
+
+Теперь выразим \(A\) и \(B\) через \(\alpha\) и \(\beta\):
+\begin{align*}
+	\frac{\beta}{1 - \alpha} &\approx \frac{e^{B} - 1}{e^{-A} - e^{B - A}} = e^{A} \implies A \approx \ln\frac{\beta}{1 - \alpha}, \\
+	\frac{1 - \beta}{\alpha} &\approx \frac{e^{B - A} - e^{B}}{e^{-A} - 1} = e^{B} \implies B \approx \ln\frac{1 - \beta}{\alpha}.
+\end{align*}
+
+Теперь подставим полученные значения для \(A\) и \(B\) в формулы для \(\E_{\theta}[\tau_{AB}]\):
+\begin{align*}
+	\E_{0}[\tau_{AB}] &\approx \frac{B(1 - \beta) + A\beta}{\rho_{0}} \approx \frac{(1 - \beta)\log\frac{1 - \beta}{\alpha} + \beta\log\frac{\beta}{1 - \alpha}}{\rho_{0}}
+	= \frac{\omega(\beta,\alpha)}{\rho_{0}}. \\
+	\E_{\infty}[\tau_{AB}] &\approx -\frac{B\alpha + A(1 - \alpha)}{\rho_{\infty}} \approx -\frac{\alpha\log\frac{1 - \beta}{\alpha}+(1 - \alpha)\log\frac{\beta}{1 - \alpha}}{\rho_{\infty}} = \\
+	&= \frac{\alpha\log\frac{\alpha}{1 - \beta} + (1 - \alpha)\log\frac{1 - \alpha}{\beta}}{\rho_{\infty}} = \frac{\omega(\alpha,\beta)}{\rho_{\infty}}.
+\end{align*}
+
+Итак, в~предположении пренебрежения эффектом перескока через границу
+\[
+	\E_{0}[\tau_{AB}] \approx \frac{\omega(\beta,\alpha)}{\rho_{0}}, \quad \E_{\infty}[\tau_{AB}] \approx \frac{\omega(\alpha,\beta)}{\rho_{\infty}}.
+\]
+
+Теперь вспомним об \hyperref[lemma:tau-limitation]{ограничении снизу}. Ясно, что в~классе тестов \((\tau, d)\) таких, что \(\E_{0}[\tau] < \infty\), \(\E_{\infty}[\tau] < \infty\) и \(\Pr_{0}(d = 0) \leq \alpha\), \(\Pr_{\infty}(d = 1) \leq \beta\), тест \((\tau_{AB},d_{AB})\) является ``почти оптимальным'' (с~точностью до пренебрежения эффектом
+перескока процессом \((Z_{n})_{n \geq 1}\) порогов \(A\) и \(B\)).
 
